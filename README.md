@@ -15,14 +15,16 @@ kubectl get deploy busybox --export -o yaml > exported.yaml
 	https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/
 	https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-2-b4f5c636eb4
 	
+	
 	```
 	 ps auxfw | grep kubelet
 	--config=/var/lib/kubelet/config.yaml
 	staticPodPath: /etc/kubernetes/manifests
 	```
+	
 **config maps**
 	
-	```kubectl create configmap app-config --from-literal=key123=value123```
+	kubectl create configmap app-config --from-literal=key123=value123
   ```
   containers:
   - image: nginx
