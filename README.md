@@ -21,7 +21,9 @@ kubectl get deploy busybox --export -o yaml > exported.yaml
 	--config=/var/lib/kubelet/config.yaml
 	staticPodPath: /etc/kubernetes/manifests
 	```
-	
+
+**daemonsets**
+
 **config maps**
 	
 	kubectl create configmap app-config --from-literal=key123=value123
@@ -79,6 +81,28 @@ spec:
             values:
             - 2u8g
             - 4u8g
+```
+**nodeselector**
+
+```
+kubectl label nodes <node-name> <label-key>=<label-value>
+
+
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      name: nginx
+      labels:
+        env: test
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        imagePullPolicy: IfNotPresent
+      nodeSelector:
+        disktype: ssd
+
+
 ```
 
 **jsonpath exp**
@@ -185,6 +209,14 @@ spec:
 
 **network policies**
 
-**kubectl explain**
+**some usefull kubectl commands**
 
-**kubectl api-resources**
+```
+$ kubectl cluster-info
+$ kubectl get nodes
+$ kubectl get componentstatuses
+$ kubectl get pods -o wide --show-labels --all-namespaces
+$ kubectl get svc  -o wide --show-labels --all-namespaces
+kubectl explain
+kubectl api-resources
+```
