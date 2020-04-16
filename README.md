@@ -1,13 +1,14 @@
 # cka
 CKA exam preparation notes by szabolcs dombi, in no particular order or logic. just some usefull stuff to practice.
 
--**TMUX quickguide:** https://linuxize.com/post/getting-started-with-tmux/
+**TMUX quickguide:** 
+- https://linuxize.com/post/getting-started-with-tmux/
 
 **openssl generate certificates (.key, .crt, .csr, x509)**
 
 **create deployment.yaml fast**
 	
-```
+```bash
 kubectl create deployment nginx --image=nginx --dry-run -oyaml > deploy_nginx.yaml
 kubectl get deploy busybox --export -o yaml > exported.yaml
 ```
@@ -52,7 +53,7 @@ kubectl describe pod etcd-master -n kube-system
 ```
 **kubeadm upgrade**
 
-https://v1-16.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+- https://v1-16.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
 
 ```bash
 #Get the version of the API server:
@@ -203,7 +204,7 @@ spec:
 ```
 
 **securityContext**
-	https://linuxacademy.com/cp/courses/lesson/course/4019/lesson/6/module/327
+- https://linuxacademy.com/cp/courses/lesson/course/4019/lesson/6/module/327
 	
 ```yaml
 apiVersion: v1
