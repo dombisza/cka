@@ -3,18 +3,35 @@ CKA exam preparation
 
 **TMUX quickguide:** https://linuxize.com/post/getting-started-with-tmux/
 
+**create deployment.yaml fast**
+	
+	```kubectl create deployment nginx --image=nginx --dry-run -oyaml > deploy_nginx.yaml```
+	```kubectl get deploy busybox --export -o yaml > exported.yaml```
 
 **static pods**
 
 	https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/
 	https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-2-b4f5c636eb4
+	
 	```
 	 ps auxfw | grep kubelet
 	--config=/var/lib/kubelet/config.yaml
 	staticPodPath: /etc/kubernetes/manifests
 	```
-
-
+**config maps**
+	
+	```kubectl create configmap app-config --from-literal=key123=value123```
+  ```
+  containers:
+  - image: nginx
+    name: nginx
+    env:
+      - name: SPECIAL_APP_KEY
+        valueFrom:
+          configMapKeyRef:
+            name: app-config
+            key: key123
+```
 **etcd backup**
 
 	https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-3-2e7b44e89a3b
@@ -29,6 +46,14 @@ CKA exam preparation
 
 **rolling upgrade and rollback**
 	https://kubernetes.io/docs/reference/kubectl/cheatsheet/ #Updating Resources
+	
+```
+kubectl run nginx --image=nginx  --replicas=3
+kubectl set image deploy/nginx nginx=nginx:1.9.1
+kubectl rollout status deploy/nginx
+kubectl rollout undo deploy/nginx
+kubectl rollout status deploy/nginx
+```
 	
 **taints and tolerations**
 	https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -83,8 +108,47 @@ spec:
 
 **securityContext**
 	https://linuxacademy.com/cp/courses/lesson/course/4019/lesson/6/module/327
+	
+```
+apiVersion: v1
+kind: Pod
+spec:
+  securityContext:
+    runAsUser: 1000
+  containers:
+  - name: sec-ctx-demo
+    image: gcr.io/google-samples/node-hello:1.0
+    securityContext:
+      runAsUser: 2000
+      allowPrivilegeEscalation: false
+```
+
+**secrets**
+```kubectl create secret generic my-secret --from-literal=foo=bar -o yaml --dry-run > my-secret.yaml
+kubectl create -f my-secret.yaml
+```
+
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secrets-test-pod
+spec:
+  containers:
+  - image: nginx
+    name: test-container
+    volumeMounts:
+    - mountPath: /etc/secret/volume
+      name: secret-volume
+  volumes:
+  - name: secret-volume
+    secret:
+      secretName: my-secret
+```
+
 
 **create service and ingress**
+
 ```
 	kubectl run kubeserve2 --image=chadmcrowell/kubeserve2
 	kubectl expose deployment kubeserve2 --port 80 --target-port 8080 --type LoadBalancer
@@ -113,6 +177,8 @@ spec:
           serviceName: httpd
           servicePort: 80
 ```
+
+**network policies**
 
 **kubectl explain**
 
