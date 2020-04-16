@@ -1,12 +1,14 @@
 # cka
-CKA exam preparation
+CKA exam preparation notes by szabolcs dombi, in no particular order or logic. just some usefull stuff to practice.
 
 **TMUX quickguide:** https://linuxize.com/post/getting-started-with-tmux/
 
 **create deployment.yaml fast**
 	
-	```kubectl create deployment nginx --image=nginx --dry-run -oyaml > deploy_nginx.yaml```
-	```kubectl get deploy busybox --export -o yaml > exported.yaml```
+```
+kubectl create deployment nginx --image=nginx --dry-run -oyaml > deploy_nginx.yaml
+kubectl get deploy busybox --export -o yaml > exported.yaml
+```
 
 **static pods**
 
