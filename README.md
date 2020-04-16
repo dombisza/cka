@@ -124,7 +124,8 @@ spec:
 ```
 
 **secrets**
-```kubectl create secret generic my-secret --from-literal=foo=bar -o yaml --dry-run > my-secret.yaml
+```
+kubectl create secret generic my-secret --from-literal=foo=bar -o yaml --dry-run > my-secret.yaml
 kubectl create -f my-secret.yaml
 ```
 
