@@ -3,6 +3,8 @@ CKA exam preparation notes by szabolcs dombi, in no particular order or logic. j
 
 **TMUX quickguide:** https://linuxize.com/post/getting-started-with-tmux/
 
+**openssl generate certificates (.key, .crt, .csr, x509)**
+
 **create deployment.yaml fast**
 	
 ```
@@ -48,6 +50,66 @@ kubectl get deploy busybox --export -o yaml > exported.yaml
 	```
 **kubeadm upgrade**
 
+https://v1-16.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+
+```
+Get the version of the API server:
+
+kubectl version --short
+
+View the version of kubelet:
+
+kubectl describe nodes
+
+View the version of controller-manager pod:
+
+kubectl get po [controller_pod_name] -o yaml -n kube-system
+
+Release the hold on versions of kubeadm and kubelet:
+
+sudo apt-mark unhold kubeadm kubelet
+
+Install version 1.16.6 of kubeadm:
+
+sudo apt install -y kubeadm=1.16.6-00
+
+Hold the version of kubeadm at 1.16.6:
+
+sudo apt-mark hold kubeadm
+
+Verify the version of kubeadm:
+
+kubeadm version
+
+Plan the upgrade of all the controller components:
+
+sudo kubeadm upgrade plan
+
+Upgrade the controller components:
+
+sudo kubeadm upgrade apply v1.16.6
+
+Release the hold on the version of kubectl:
+
+sudo apt-mark unhold kubectl
+
+Upgrade kubectl:
+
+sudo apt install -y kubectl=1.16.6-00
+
+Hold the version of kubectl at 1.16.6:
+
+sudo apt-mark hold kubectl
+
+Upgrade the version of kubelet:
+
+sudo apt install -y kubelet=1.16.6-00
+
+Hold the version of kubelet at 1.16.6:
+
+sudo apt-mark hold kubelet
+
+```
 
 
 **rolling upgrade and rollback**
@@ -208,6 +270,14 @@ spec:
 ```
 
 **network policies**
+
+https://kubernetes.io/docs/concepts/services-networking/network-policies/
+
+**to check / read **
+
+https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+https://kubernetes.io/docs/concepts/cluster-administration/cluster-administration-overview/#securing-a-cluster
+https://docs.google.com/spreadsheets/d/10NltoF_6y3mBwUzQ4bcQLQfCE1BWSgUDcJXy-Qp2JEU/edit#gid=0
 
 **some usefull kubectl commands**
 
