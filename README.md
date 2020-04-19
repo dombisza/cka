@@ -1,6 +1,18 @@
 # cka
 CKA exam preparation notes, in no particular order or logic. just some usefull stuff to practice.
 
+The cluster I used for pactising is a 3 node kubeadm bootstrapped cluster run on OTC ECS'es.
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl get nodes -owide
+NAME                 STATUS   ROLES    AGE   VERSION   INTERNAL-IP    EXTERNAL-IP   OS-IMAGE                       KERNEL-VERSION   CONTAINER-RUNTIME
+sdombi-k8s-master    Ready    master   10d   v1.15.7   192.168.1.96   <none>        Debian GNU/Linux 10 (buster)   4.19.0-8-amd64   docker://19.3.8
+sdombi-k8s-worker1   Ready    <none>   10d   v1.15.7   192.168.1.7    <none>        Debian GNU/Linux 10 (buster)   4.19.0-8-amd64   docker://19.3.8
+sdombi-k8s-worker2   Ready    <none>   10d   v1.15.7   192.168.1.27   <none>        Debian GNU/Linux 10 (buster)   4.19.0-8-amd64   docker://19.3.8
+
+
+```
+
 **TMUX quickguide:** 
 - https://linuxize.com/post/getting-started-with-tmux/
 
