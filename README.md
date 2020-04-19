@@ -456,6 +456,45 @@ node/sdombi-k8s-worker1 labeled
 
 - Q: Create a new namespace called "cloud9". Create a pod running k8s.gcr.io/liveness with a liveliness probe that uses httpGet to probe an endpoint path located at /cloud-health on port 8080.  The httpHeaders are name=Custom-Header and value=Awesome. The initial delay is 3 seconds and the period is 3.
 
+**solution**
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl run liveness --generator=run-pod/v1 --image=k8s.gcr.io/liveness -ncloud9 --dry-run -oyaml > liveness.yaml
+```
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: liveness
+  name: liveness
+  namespace: cloud9
+spec:
+  containers:
+  - image: k8s.gcr.io/liveness
+    name: liveness
+    resources: {}
+    livenessProbe:
+      httpGet:
+        path: /cloud-health
+        port: 8080
+        httpHeaders:
+        - name: Custom-Header
+          value: Awesome
+      initialDelaySeconds: 3
+      periodSeconds: 3
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+```
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl apply -f liveness.yaml
+```
+
+
 - Q: Create a deployment with two replicas of nginx:1.7.9. The container listens on port 80. It should be named "web-dep" and be labeled with tier=frontend with an annotation of AppVersion=3.4. The containers must be running with the UID of 1000. Scale up the deployment to 10 replicas and perform a rolling update on it.
 
 **solution**
