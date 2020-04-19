@@ -447,6 +447,49 @@ nginx-service   LoadBalancer   10.105.103.48   <pending>     80:32030/TCP   55s
 Attach the pod to emptyDir storage, mounted to /tmp in the container. 
 Connect to the pod and create a file with zero bytes in the /tmp directory called my-doc.txt. 
 
+**solution**
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl run haz-docs --generator=run-pod/v1 --image=nginx --port=80 --dry-run -oyaml > haz-docs.yaml
+```
+
+add volume
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: haz-docs
+  name: haz-docs
+spec:
+  containers:
+  - image: nginx
+    name: haz-docs
+    volumeMounts:
+    - mountPath: /tmp
+      name: tmpmount
+    ports:
+    - containerPort: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+  volumes:
+  - name: tmpmount
+    emptyDir: {}
+status: {}
+
+```
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl apply -f haz-docs.yaml
+pod/haz-docs created
+linux@sdombi-k8s-master:~$ kubectl exec -it haz-docs touch /tmp/my-doc.txt
+linux@sdombi-k8s-master:~$ kubectl exec -it haz-docs ls /tmp
+my-doc.txt
+
+```
+
 - Q: Label the worker node of your cluster with rack=qa.
 
 ```bash
