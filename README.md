@@ -458,6 +458,8 @@ node/sdombi-k8s-worker1 labeled
 
 - Q: Create a deployment with two replicas of nginx:1.7.9. The container listens on port 80. It should be named "web-dep" and be labeled with tier=frontend with an annotation of AppVersion=3.4. The containers must be running with the UID of 1000. Scale up the deployment to 10 replicas and perform a rolling update on it.
 
+**solution**
+
 ```bash
 linux@sdombi-k8s-master:~$ kubectl create deployment nginx --image=nginx:1.7.9 --dry-run -oyaml > nginx179.yaml
 ```
@@ -516,6 +518,43 @@ deployment "web-dep" successfully rolled out
 ```
 
 - Q: Configure a DaemonSet to run the image k8s.gcr.io/pause:2.0 in the cluster.
+
+**solution**
+
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: pause-daemon
+  labels:
+    app: paused
+spec:
+  selector:
+    matchLabels:
+      app: paused
+  template:
+    metadata:
+      labels:
+        app: paused
+    spec:
+      tolerations:
+      # this toleration is to have the daemonset runnable on master nodes
+      # remove it if your masters can't run pods
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: paused
+        image: k8s.gcr.io/pause:2.0
+      terminationGracePeriodSeconds: 30
+```
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl apply -f daemonset.yaml
+daemonset.apps/pause-daemon created
+linux@sdombi-k8s-master:~$ kubectl get daemonsets.
+NAME           DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+pause-daemon   3         3         3       3            3           <none>          4s
+```
 
 - Q: Configure the cluster to use 8.8.8.8 and 8.8.4.4 as upstream DNS servers. https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/
 
