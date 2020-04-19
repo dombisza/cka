@@ -459,6 +459,7 @@ node/sdombi-k8s-worker1 labeled
 **solution**
 
 ```bash
+linux@sdombi-k8s-master:~$ kubectl create namespace cloud9
 linux@sdombi-k8s-master:~$ kubectl run liveness --generator=run-pod/v1 --image=k8s.gcr.io/liveness -ncloud9 --dry-run -oyaml > liveness.yaml
 ```
 
