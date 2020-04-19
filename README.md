@@ -449,9 +449,61 @@ Connect to the pod and create a file with zero bytes in the /tmp directory calle
 
 - Q: Label the worker node of your cluster with rack=qa.
 
+```bash
+linux@sdombi-k8s-master:~$ kubectl label nodes sdombi-k8s-worker1 rack=qa
+node/sdombi-k8s-worker1 labeled
+```
+
 - Q: Create a new namespace called "cloud9". Create a pod running k8s.gcr.io/liveness with a liveliness probe that uses httpGet to probe an endpoint path located at /cloud-health on port 8080.  The httpHeaders are name=Custom-Header and value=Awesome. The initial delay is 3 seconds and the period is 3.
 
 - Q: Create a deployment with two replicas of nginx:1.7.9. The container listens on port 80. It should be named "web-dep" and be labeled with tier=frontend with an annotation of AppVersion=3.4. The containers must be running with the UID of 1000. Scale up the deployment to 10 replicas and perform a rolling update on it.
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl create deployment nginx --image=nginx:1.7.9 --dry-run -oyaml > nginx179.yaml
+```
+add/set yaml[annotation,label,name,replicas,securitycontext,port]
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nginx
+    tier: frontend
+  name: web-dep
+  annotations:
+    AppVersion: 3.4
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx
+    spec:
+      securityContext:
+        runAsUser: 1000
+      containers:
+      - image: nginx:1.7.9
+        name: nginx
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
+
+```
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl apply -f nginx179.yaml
+TODO
+kubectl scale deployment
+kubectl set image
+check update status
+```
 
 - Q: Configure a DaemonSet to run the image k8s.gcr.io/pause:2.0 in the cluster.
 
