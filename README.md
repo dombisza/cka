@@ -499,10 +499,20 @@ status: {}
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl apply -f nginx179.yaml
-TODO
-kubectl scale deployment
-kubectl set image
-check update status
+linux@sdombi-k8s-master:~$ kubectl scale deployment --replicas=10 web-dep
+deployment.extensions/web-dep scaled
+linux@sdombi-k8s-master:~$ kubectl set image deploy/web-dep nginx=nginx:1.17
+deployment.extensions/web-dep image updated
+linux@sdombi-k8s-master:~$ kubectl rollout status deploy/web-dep
+deployment "web-dep" successfully rolled out
+linux@sdombi-k8s-master:~$ kubectl rollout undo deploy/web-dep
+deployment.extensions/web-dep rolled back
+linux@sdombi-k8s-master:~$ kubectl rollout status deploy/web-dep
+Waiting for deployment "web-dep" rollout to finish: 9 of 10 updated replicas are available...
+deployment "web-dep" successfully rolled out
+linux@sdombi-k8s-master:~$ kubectl rollout status deploy/web-dep
+deployment "web-dep" successfully rolled out
+
 ```
 
 - Q: Configure a DaemonSet to run the image k8s.gcr.io/pause:2.0 in the cluster.
