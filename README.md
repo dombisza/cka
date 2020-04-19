@@ -442,3 +442,36 @@ NAME            TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 nginx-service   LoadBalancer   10.105.103.48   <pending>     80:32030/TCP   55s
 
 ```
+
+- Q: Create a pod called "haz-docs" with an nginx image listening on port 80. 
+Attach the pod to emptyDir storage, mounted to /tmp in the container. 
+Connect to the pod and create a file with zero bytes in the /tmp directory called my-doc.txt. 
+
+- Q: Label the worker node of your cluster with rack=qa.
+
+- Q: Create a new namespace called "cloud9". Create a pod running k8s.gcr.io/liveness with a liveliness probe that uses httpGet to probe an endpoint path located at /cloud-health on port 8080.  The httpHeaders are name=Custom-Header and value=Awesome. The initial delay is 3 seconds and the period is 3.
+
+- Q: Create a deployment with two replicas of nginx:1.7.9. The container listens on port 80. It should be named "web-dep" and be labeled with tier=frontend with an annotation of AppVersion=3.4. The containers must be running with the UID of 1000. Scale up the deployment to 10 replicas and perform a rolling update on it.
+
+- Q: Configure a DaemonSet to run the image k8s.gcr.io/pause:2.0 in the cluster.
+
+- Q: Configure the cluster to use 8.8.8.8 and 8.8.4.4 as upstream DNS servers. https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/
+
+- Q: Figure out a way to create a pod with 3 replicas using the the nginx container that can have pods deployed 
+on a worker node and the master node if needed. HINT taint
+
+- Q: Copy all Kubernetes scheduler logs into a logs directory in your home directory.
+
+- Q: Create a yaml file called db-secret.yaml for a secret called db-user-pass. The secret should have two fields: a username and password.  The username should be "superadmin" and the password should be "imamazing".
+
+- Q: Create a ConfigMap called web-config that contains the following two entries: 'web_port' set to 'localhost:8080' 'external_url' set to 'reddit.com' Run a pod called web-config-pod running nginx, expose the configmap settings as environment variables inside the nginx container.
+
+- Q: Create a namespace called awsdb in your cluster.  Create a pod called db-deploy that has one container running mysql image, and one container running nginx:1.7.9 In the same namespace create a pod called nginx-deploy with a single container running the image nginx:1.9.1.  Export the output of kubectl get pods for the awsdb namespace into a file called "pod-list.txt"
+
+- Q: This requires having a cluster with 2 worker nodes Safely remove one node from the cluster.  Print the output of the node status into a file "worker-removed.txt". Reboot the worker node.   Print the output of node status showing worker unable to be scheduled to "rebooted-worker.txt" Now bring the node back into the cluster and schedule several nginx pods to it, print the get pods wide output showing at least  one pod is on the node you rebooted.
+
+- Q: Create a deployment running nginx, mount a volume called "hostvolume" with a container volume mount at /tmp 
+and mounted to the host at /data.  If the directory isn't there make sure it is created in the pod spec at run time.
+Go into the container and create an empty file called "my-doc.txt" inside the /tmp directory.  On the worker node 
+that it was scheduled to, go into the /data directory and output a list of the contents to list-output.txt showing 
+the file exists.
