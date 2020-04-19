@@ -575,7 +575,7 @@ linux@sdombi-k8s-master:~$ kubectl logs `kubectl get pods -nkube-system | grep s
 
 ```bash
 linux@sdombi-k8s-master:~$ echo -n 'superadmin' > username.txt
-linux@sdombi-k8s-master:~$ echo -n 'imamazing' > password.txt
+linux@sdombi-k8s-master:~$ echo -n 'pigbenispassword' > password.txt
 linux@sdombi-k8s-master:~$ kubectl create secret generic db-secret --from-file=./username.txt --from-file=./password.txt --dry-run -oyaml > db-secret.yaml
 linux@sdombi-k8s-master:~$ cat db-secret.yaml
 apiVersion: v1
