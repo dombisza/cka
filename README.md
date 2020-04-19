@@ -73,6 +73,8 @@ staticPodPath: /etc/kubernetes/manifests
 
 **daemonsets**
 
+- https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+
 **config maps**
 ```bash	
 kubectl create configmap app-config --from-literal=key123=value123
