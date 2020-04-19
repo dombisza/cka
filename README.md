@@ -385,3 +385,60 @@ kubectl explain
 kubectl api-resources
 kubectl get events
 ```
+**PRACTICE**
+
+- Q: Create a yaml file called nginx-deploy.yaml for a deployment of three replicas of nginx, listening on the container's port 80. 
+They should have the labels role=webserver and app=nginx. The deployment should be named nginx-deploy.
+Expose the deployment with a load balancer and use a curl statement on the IP address of the load balancer 
+to export the output to a file titled output.txt.
+
+-Solution:
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl create deployment nginx --image=nginx --dry-run -oyaml > nginx.yaml
+```
+edit the yaml, add[label, replicas, port]
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nginx
+    role: webserver
+  name: nginx-deploy
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+status: {}
+```
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl apply -f nginx.yaml
+linux@sdombi-k8s-master:~$ kubectl get deployments
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deploy   2/3     3            2           9s
+
+linux@sdombi-k8s-master:~$ kubectl expose deployment nginx-deploy --type=LoadBalancer --name=nginx-service
+service/nginx-service exposed
+linux@sdombi-k8s-master:~$ kubectl get svc -l=app=nginx
+NAME            TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+nginx-service   LoadBalancer   10.105.103.48   <pending>     80:32030/TCP   55s
+
+```
