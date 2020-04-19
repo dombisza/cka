@@ -383,4 +383,5 @@ $ kubectl get pods -o wide --show-labels --all-namespaces
 $ kubectl get svc  -o wide --show-labels --all-namespaces
 kubectl explain
 kubectl api-resources
+kubectl get events
 ```
