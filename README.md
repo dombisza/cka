@@ -563,6 +563,12 @@ on a worker node and the master node if needed. HINT taint
 
 - Q: Copy all Kubernetes scheduler logs into a logs directory in your home directory.
 
+**solution**
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl logs `kubectl get pods -nkube-system | grep scheduler | awk '{print $1}'` -nkube-system > ~/scheduler.log
+```
+
 - Q: Create a yaml file called db-secret.yaml for a secret called db-user-pass. The secret should have two fields: a username and password.  The username should be "superadmin" and the password should be "imamazing".
 
 - Q: Create a ConfigMap called web-config that contains the following two entries: 'web_port' set to 'localhost:8080' 'external_url' set to 'reddit.com' Run a pod called web-config-pod running nginx, expose the configmap settings as environment variables inside the nginx container.
