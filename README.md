@@ -571,6 +571,24 @@ linux@sdombi-k8s-master:~$ kubectl logs `kubectl get pods -nkube-system | grep s
 
 - Q: Create a yaml file called db-secret.yaml for a secret called db-user-pass. The secret should have two fields: a username and password.  The username should be "superadmin" and the password should be "imamazing".
 
+**solution**
+
+```bash
+linux@sdombi-k8s-master:~$ echo -n 'superadmin' > username.txt
+linux@sdombi-k8s-master:~$ echo -n 'imamazing' > password.txt
+linux@sdombi-k8s-master:~$ kubectl create secret generic db-secret --from-file=./username.txt --from-file=./password.txt --dry-run -oyaml > db-secret.yaml
+linux@sdombi-k8s-master:~$ cat db-secret.yaml
+apiVersion: v1
+data:
+  password.txt: aW1hbWF6aW5n
+  username.txt: c3VwZXJhZG1pbg==
+kind: Secret
+metadata:
+  creationTimestamp: null
+  name: db-secret
+
+```
+
 - Q: Create a ConfigMap called web-config that contains the following two entries: 'web_port' set to 'localhost:8080' 'external_url' set to 'reddit.com' Run a pod called web-config-pod running nginx, expose the configmap settings as environment variables inside the nginx container.
 
 - Q: Create a namespace called awsdb in your cluster.  Create a pod called db-deploy that has one container running mysql image, and one container running nginx:1.7.9 In the same namespace create a pod called nginx-deploy with a single container running the image nginx:1.9.1.  Export the output of kubectl get pods for the awsdb namespace into a file called "pod-list.txt"
