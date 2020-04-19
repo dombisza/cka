@@ -1,5 +1,5 @@
 # cka
-CKA exam preparation notes by szabolcs dombi, in no particular order or logic. just some usefull stuff to practice.
+CKA exam preparation notes, in no particular order or logic. just some usefull stuff to practice.
 
 **TMUX quickguide:** 
 - https://linuxize.com/post/getting-started-with-tmux/
