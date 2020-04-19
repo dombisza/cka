@@ -53,11 +53,15 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
 openssl x509  -noout -text -in ./server.crt
 ```
 
-**create deployment.yaml fast**
+**create yaml templates fast**
 	
 ```bash
 kubectl create deployment nginx --image=nginx --dry-run -oyaml > deploy_nginx.yaml
-kubectl get deploy busybox --export -o yaml > exported.yaml
+kubectl expose deployment nginx --type=NodePort --name=nginx-service --dry-run -oyaml > nginx_service_for_deploy.yaml
+
+kubectl run --generator=run-pod/v1 nginx --image=nginx -oyaml > pod_nginx.yaml
+kubectl expose pod nginx --type=NodePort --name=nginx=service --dry-run -oyaml > nginx_service_for_pod.yaml
+
 ```
 
 **static pods**
@@ -222,7 +226,17 @@ kubectl label nodes <node-name> <label-key>=<label-value>
         disktype: ssd
 ```
 
-**jsonpath exp**
+**fieldselectors and filtering**
+
+- https://kubernetes.io/docs/reference/kubectl/cheatsheet/ 
+- https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-4-17407899ef1a
+
+```
+kubectl get nodes -o jsonpath=’{.items[*].status.addresses[?(@.type==”ExternalIP”)].address}’
+kubectl get services — sort-by=.metadata.name
+kubectl get pods <pod-name> -o custom-columns=NAME:.metadata.name,RSRC:.metadata.resourceVersion
+kubectl get pod -o jsonpath=’{.items[*].metadata.name}’
+```
 
 **kube-controll**
 
