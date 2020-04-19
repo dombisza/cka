@@ -331,6 +331,28 @@ spec:
 
 - https://kubernetes.io/docs/concepts/services-networking/network-policies/
 
+**port forwarding**
+
+- https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/
+
+```bash
+kubectl create deployment nginx --image=nginx
+kubectl get pods -l app=nginx
+
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-554b9c67f9-vt5rn   1/1     Running   0          10s
+
+kubectl port-forward $POD_NAME 8080:80
+
+Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
+
+curl --head http://127.0.0.1:8080
+
+kubectl logs $POD_NAME
+
+```
+
 **to check / read **
 
 - https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
