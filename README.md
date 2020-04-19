@@ -392,7 +392,7 @@ They should have the labels role=webserver and app=nginx. The deployment should 
 Expose the deployment with a load balancer and use a curl statement on the IP address of the load balancer 
 to export the output to a file titled output.txt.
 
--Solution:
+- Solution:
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl create deployment nginx --image=nginx --dry-run -oyaml > nginx.yaml
