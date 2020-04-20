@@ -1,7 +1,7 @@
 # cka
 CKA exam preparation notes and practice questions.
 
-The cluster I used for pactising is a 3 node kubeadm bootstrapped cluster run on OTC ECS'es.
+The cluster I used for pacticing is a 3 node kubeadm bootstrapped cluster run on OTC ECS'es.
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl get nodes -owide
