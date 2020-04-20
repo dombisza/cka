@@ -14,7 +14,7 @@ sdombi-k8s-worker2   Ready    <none>   10d   v1.15.7   192.168.1.27   <none>    
 ```
 
 
--    **Application Lifecycle Management 8%**
+## Application Lifecycle Management 8%
 
 - create yaml templates fast
 	
@@ -51,7 +51,7 @@ kubectl rollout undo deploy/nginx
 kubectl rollout status deploy/nginx
 ```
 
--    **Installation, Configuration & Validation 12%** + **Cluster Maintenance 11%**
+## Installation, Configuration & Validation 12%** + **Cluster Maintenance 11%**
 
 - kubeadm upgrade
 
@@ -126,7 +126,7 @@ ETCDCTL_API=3 etcdctl — endpoints=[ENDPOINT] — cacert=[CA CERT] — cert=[ET
 kubectl describe pod etcd-master -n kube-system
 ```
 
--    **Core Concepts 19%**
+## Core Concepts 19%**
 
 - config maps
 
@@ -146,7 +146,7 @@ kubectl create configmap app-config --from-literal=key123=value123
             key: key123
 ```
 
--    **Networking 11%**
+## Networking 11%**
 
 
 - network policies
@@ -208,7 +208,7 @@ spec:
           servicePort: 80
 ```
 
--    **Scheduling 5%**
+## Scheduling 5%**
 
 - static pods
 
@@ -273,7 +273,7 @@ kubectl label nodes <node-name> <label-key>=<label-value>
 ```
 
 
--    **Security 12%**
+## Security 12%**
 
 - SecurityContext
 
@@ -319,9 +319,8 @@ spec:
       secretName: my-secret
 ```
 
--    **Logging / Monitoring 5%**
--    **Storage 7%**
-
+## Logging / Monitoring 5%**
+## Storage 7%**
 
 - create pv
 
@@ -342,7 +341,7 @@ spec:
     path: "/mnt/data"
 ```
 
--    **Troubleshooting 10%**
+## Troubleshooting 10%**
 
 	
 
