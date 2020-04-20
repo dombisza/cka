@@ -51,7 +51,7 @@ kubectl rollout undo deploy/nginx
 kubectl rollout status deploy/nginx
 ```
 
--    **Installation, Configuration & Validation 12%**
+-    **Installation, Configuration & Validation 12%** + **Cluster Maintenance 11%**
 
 kubeadm upgrade
 
@@ -318,8 +318,6 @@ spec:
       secretName: my-secret
 ```
 
-
--    **Cluster Maintenance 11%**
 -    **Logging / Monitoring 5%**
 -    **Storage 7%**
 
