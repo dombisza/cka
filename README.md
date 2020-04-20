@@ -761,6 +761,103 @@ metadata:
 
 - Q: This requires having a cluster with 2 worker nodes Safely remove one node from the cluster.  Print the output of the node status into a file "worker-removed.txt". Reboot the worker node.   Print the output of node status showing worker unable to be scheduled to "rebooted-worker.txt" Now bring the node back into the cluster and schedule several nginx pods to it, print the get pods wide output showing at least  one pod is on the node you rebooted.
 
+```bash
+linux@sdombi-k8s-master:~$ kubectl get pods -o custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
+NAME                            NODE
+haz-docs                        sdombi-k8s-worker1
+nginx-554b9c67f9-26qln          sdombi-k8s-worker2
+nginx-554b9c67f9-6rd4n          sdombi-k8s-worker2
+nginx-554b9c67f9-8dtwg          sdombi-k8s-worker1
+nginx-554b9c67f9-bqxr8          sdombi-k8s-worker2
+nginx-554b9c67f9-gflm4          sdombi-k8s-worker1
+nginx-554b9c67f9-hp974          sdombi-k8s-worker1
+nginx-554b9c67f9-hrm7t          sdombi-k8s-worker2
+nginx-554b9c67f9-hzjrd          sdombi-k8s-worker2
+nginx-554b9c67f9-jv86b          sdombi-k8s-worker1
+nginx-554b9c67f9-p8mnm          sdombi-k8s-worker1
+pause-daemon-6tjdf              sdombi-k8s-worker2
+pause-daemon-9hp96              sdombi-k8s-worker1
+pause-daemon-9sjn9              sdombi-k8s-master
+static-web-sdombi-k8s-worker1   sdombi-k8s-worker1
+
+linux@sdombi-k8s-master:~$ kubectl drain sdombi-k8s-worker1 --ignore-daemonsets
+
+linux@sdombi-k8s-master:~$ kubectl get pods -o custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
+NAME                            NODE
+nginx-554b9c67f9-26qln          sdombi-k8s-worker2
+nginx-554b9c67f9-2mw6s          sdombi-k8s-worker2
+nginx-554b9c67f9-6rd4n          sdombi-k8s-worker2
+nginx-554b9c67f9-9cfht          sdombi-k8s-worker2
+nginx-554b9c67f9-bbxl6          sdombi-k8s-worker2
+nginx-554b9c67f9-bqxr8          sdombi-k8s-worker2
+nginx-554b9c67f9-bxfqv          sdombi-k8s-worker2
+nginx-554b9c67f9-hrm7t          sdombi-k8s-worker2
+nginx-554b9c67f9-hzjrd          sdombi-k8s-worker2
+nginx-554b9c67f9-lrr49          sdombi-k8s-worker2
+pause-daemon-6tjdf              sdombi-k8s-worker2
+pause-daemon-9hp96              sdombi-k8s-worker1
+pause-daemon-9sjn9              sdombi-k8s-master
+static-web-sdombi-k8s-worker1   sdombi-k8s-worker1
+
+linux@sdombi-k8s-master:~$ kubectl get nodes
+NAME                 STATUS                     ROLES    AGE   VERSION
+sdombi-k8s-master    Ready                      master   11d   v1.15.7
+sdombi-k8s-worker1   Ready,SchedulingDisabled   <none>   11d   v1.15.7
+sdombi-k8s-worker2   Ready                      <none>   11d   v1.15.7
+
+#REBOOT node01
+
+linux@sdombi-k8s-master:~$ kubectl uncordon sdombi-k8s-worker1
+node/sdombi-k8s-worker1 uncordoned
+linux@sdombi-k8s-master:~$ kubectl get pods -o custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
+NAME                            NODE
+nginx-554b9c67f9-26qln          sdombi-k8s-worker2
+nginx-554b9c67f9-2mw6s          sdombi-k8s-worker2
+nginx-554b9c67f9-6rd4n          sdombi-k8s-worker2
+nginx-554b9c67f9-9cfht          sdombi-k8s-worker2
+nginx-554b9c67f9-bbxl6          sdombi-k8s-worker2
+nginx-554b9c67f9-bqxr8          sdombi-k8s-worker2
+nginx-554b9c67f9-bxfqv          sdombi-k8s-worker2
+nginx-554b9c67f9-hrm7t          sdombi-k8s-worker2
+nginx-554b9c67f9-hzjrd          sdombi-k8s-worker2
+nginx-554b9c67f9-lrr49          sdombi-k8s-worker2
+pause-daemon-6tjdf              sdombi-k8s-worker2
+pause-daemon-9hp96              sdombi-k8s-worker1
+pause-daemon-9sjn9              sdombi-k8s-master
+static-web-sdombi-k8s-worker1   sdombi-k8s-worker1
+
+# my only idea was to taint worker2 to stop scheduling and reschedule 5 pods to worker1 to keep it balanced
+
+linux@sdombi-k8s-master:~$ kubectl taint nodes sdombi-k8s-worker2 stop=true:NoSchedule
+node/sdombi-k8s-worker2 tainted
+
+linux@sdombi-k8s-master:~$ kubectl get pods -o custom-columns=NAME:.metadata.name | grep nginx | tail -5 | while read x; do kubectl delete pod $x; done
+pod "nginx-554b9c67f9-bqxr8" deleted
+pod "nginx-554b9c67f9-bxfqv" deleted
+pod "nginx-554b9c67f9-hrm7t" deleted
+pod "nginx-554b9c67f9-hzjrd" deleted
+pod "nginx-554b9c67f9-lrr49" deleted
+
+linux@sdombi-k8s-master:~$ kubectl taint node sdombi-k8s-worker2 stop:NoSchedule-
+node/sdombi-k8s-worker2 untainted
+linux@sdombi-k8s-master:~$ kubectl get pods -o custom-columns=NAME:.metadata.name,NODE:.spec.nodeName            NAME                            NODE
+nginx-554b9c67f9-26qln          sdombi-k8s-worker2
+nginx-554b9c67f9-2mw6s          sdombi-k8s-worker2
+nginx-554b9c67f9-594q8          sdombi-k8s-worker1
+nginx-554b9c67f9-5gw5m          sdombi-k8s-worker1
+nginx-554b9c67f9-6rd4n          sdombi-k8s-worker2
+nginx-554b9c67f9-8qw6z          sdombi-k8s-worker1
+nginx-554b9c67f9-9cfht          sdombi-k8s-worker2
+nginx-554b9c67f9-bbxl6          sdombi-k8s-worker2
+nginx-554b9c67f9-l4fnd          sdombi-k8s-worker1
+nginx-554b9c67f9-mjpq6          sdombi-k8s-worker1
+pause-daemon-6tjdf              sdombi-k8s-worker2
+pause-daemon-9hp96              sdombi-k8s-worker1
+pause-daemon-9sjn9              sdombi-k8s-master
+static-web-sdombi-k8s-worker1   sdombi-k8s-worker1
+
+```
+
 - Q: Create a deployment running nginx, mount a volume called "hostvolume" with a container volume mount at /tmp 
 and mounted to the host at /data.  If the directory isn't there make sure it is created in the pod spec at run time.
 Go into the container and create an empty file called "my-doc.txt" inside the /tmp directory.  On the worker node 
