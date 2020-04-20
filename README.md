@@ -343,7 +343,7 @@ spec:
     path: "/mnt/data"
 ```
 
--    Troubleshooting 10%
+-    **Troubleshooting 10%**
 
 	
 
