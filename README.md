@@ -16,7 +16,7 @@ sdombi-k8s-worker2   Ready    <none>   10d   v1.15.7   192.168.1.27   <none>    
 
 ## Application Lifecycle Management 8%
 
-https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#scaling-your-application
+https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#scaling-your-application  
 https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/
 https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 
