@@ -15,6 +15,16 @@ sdombi-k8s-worker2   Ready    <none>   10d   v1.15.7   192.168.1.27   <none>    
 
 
 -    Application Lifecycle Management 8%
+**create yaml templates fast**
+	
+```bash
+kubectl create deployment nginx --image=nginx --dry-run -oyaml > deploy_nginx.yaml
+kubectl expose deployment nginx --type=NodePort --name=nginx-service --dry-run -oyaml > nginx_service_for_deploy.yaml
+
+kubectl run --generator=run-pod/v1 nginx --image=nginx -oyaml > pod_nginx.yaml
+kubectl expose pod nginx --type=NodePort --name=nginx=service --dry-run -oyaml > nginx_service_for_pod.yaml
+
+```
 -    Installation, Configuration & Validation 12%
 -    Core Concepts 19%
 -    Networking 11%
@@ -79,16 +89,7 @@ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
 openssl x509  -noout -text -in ./server.crt
 ```
 
-**create yaml templates fast**
-	
-```bash
-kubectl create deployment nginx --image=nginx --dry-run -oyaml > deploy_nginx.yaml
-kubectl expose deployment nginx --type=NodePort --name=nginx-service --dry-run -oyaml > nginx_service_for_deploy.yaml
 
-kubectl run --generator=run-pod/v1 nginx --image=nginx -oyaml > pod_nginx.yaml
-kubectl expose pod nginx --type=NodePort --name=nginx=service --dry-run -oyaml > nginx_service_for_pod.yaml
-
-```
 
 **static pods**
 
