@@ -1,5 +1,5 @@
 # cka
-CKA exam preparation notes, in no particular order or logic. just some usefull stuff to practice.
+CKA exam preparation notes and practice questions.
 
 The cluster I used for pactising is a 3 node kubeadm bootstrapped cluster run on OTC ECS'es.
 
