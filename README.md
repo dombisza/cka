@@ -15,6 +15,7 @@ sdombi-k8s-worker2   Ready    <none>   10d   v1.15.7   192.168.1.27   <none>    
 
 
 -    Application Lifecycle Management 8%
+
 **create yaml templates fast**
 	
 ```bash
@@ -25,112 +26,33 @@ kubectl run --generator=run-pod/v1 nginx --image=nginx -oyaml > pod_nginx.yaml
 kubectl expose pod nginx --type=NodePort --name=nginx=service --dry-run -oyaml > nginx_service_for_pod.yaml
 
 ```
+
+**fieldselectors and filtering**
+
+- https://kubernetes.io/docs/reference/kubectl/cheatsheet/ 
+- https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-4-17407899ef1a
+
+```
+kubectl get nodes -o jsonpath=’{.items[*].status.addresses[?(@.type==”ExternalIP”)].address}’
+kubectl get services — sort-by=.metadata.name
+kubectl get pods <pod-name> -o custom-columns=NAME:.metadata.name,RSRC:.metadata.resourceVersion
+kubectl get pod -o jsonpath=’{.items[*].metadata.name}’
+```
+
+**rolling upgrade and rollback**
+
+- https://kubernetes.io/docs/reference/kubectl/cheatsheet/ #Updating Resources
+	
+```bash
+kubectl run nginx --image=nginx  --replicas=3
+kubectl set image deploy/nginx nginx=nginx:1.9.1
+kubectl rollout status deploy/nginx
+kubectl rollout undo deploy/nginx
+kubectl rollout status deploy/nginx
+```
+
 -    Installation, Configuration & Validation 12%
--    Core Concepts 19%
--    Networking 11%
--    Scheduling 5%
--    Security 12%
--    Cluster Maintenance 11%
--    Logging / Monitoring 5%
--    Storage 7%
--    Troubleshooting 10%
 
-
-
-**TMUX quickguide:** 
-- https://linuxize.com/post/getting-started-with-tmux/
-
-**openssl generate certificates for the cluster (.key, .crt, .csr, x509)**
-
-```
-openssl genrsa -out ca.key 2048
-openssl req -x509 -new -nodes -key ca.key -subj "/CN=${MASTER_IP}" -days 10000 -out ca.crt
-openssl genrsa -out server.key 2048
-
-###Create a config file for generating a Certificate Signing Request (CSR).
-[ req ]
-default_bits = 2048
-prompt = no
-default_md = sha256
-req_extensions = req_ext
-distinguished_name = dn
-
-[ dn ]
-C = <country>
-ST = <state>
-L = <city>
-O = <organization>
-OU = <organization unit>
-CN = <MASTER_IP>
-
-[ req_ext ]
-subjectAltName = @alt_names
-
-[ alt_names ]
-DNS.1 = kubernetes
-DNS.2 = kubernetes.default
-DNS.3 = kubernetes.default.svc
-DNS.4 = kubernetes.default.svc.cluster
-DNS.5 = kubernetes.default.svc.cluster.local
-IP.1 = <MASTER_IP>
-IP.2 = <MASTER_CLUSTER_IP>
-
-[ v3_ext ]
-authorityKeyIdentifier=keyid,issuer:always
-basicConstraints=CA:FALSE
-keyUsage=keyEncipherment,dataEncipherment
-extendedKeyUsage=serverAuth,clientAuth
-subjectAltName=@alt_names
-
-openssl req -new -key server.key -out server.csr -config csr.conf
-openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
--CAcreateserial -out server.crt -days 10000 \
--extensions v3_ext -extfile csr.conf
-openssl x509  -noout -text -in ./server.crt
-```
-
-
-
-**static pods**
-
-- https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/
-- https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-2-b4f5c636eb4
-		
-```bash
-ps auxfw | grep kubelet
---config=/var/lib/kubelet/config.yaml
-staticPodPath: /etc/kubernetes/manifests
-```
-
-**daemonsets**
-
-- https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
-
-**config maps**
-```bash	
-kubectl create configmap app-config --from-literal=key123=value123
-```
-
-```yaml
-  containers:
-  - image: nginx
-    name: nginx
-    env:
-      - name: SPECIAL_APP_KEY
-        valueFrom:
-          configMapKeyRef:
-            name: app-config
-            key: key123
-```
-**etcd backup**
-
-- https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-3-2e7b44e89a3b
-
-```bash
-ETCDCTL_API=3 etcdctl help
-ETCDCTL_API=3 etcdctl — endpoints=[ENDPOINT] — cacert=[CA CERT] — cert=[ETCD SERVER CERT] — key=[ETCD SERVER KEY] snapshot save [BACKUP FILE NAME]
-kubectl describe pod etcd-master -n kube-system
-```
 **kubeadm upgrade**
 
 - https://v1-16.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
@@ -194,19 +116,114 @@ sudo apt-mark hold kubelet
 
 ```
 
+**etcd backup**
 
-**rolling upgrade and rollback**
+- https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-3-2e7b44e89a3b
 
-- https://kubernetes.io/docs/reference/kubectl/cheatsheet/ #Updating Resources
-	
 ```bash
-kubectl run nginx --image=nginx  --replicas=3
-kubectl set image deploy/nginx nginx=nginx:1.9.1
-kubectl rollout status deploy/nginx
-kubectl rollout undo deploy/nginx
-kubectl rollout status deploy/nginx
+ETCDCTL_API=3 etcdctl help
+ETCDCTL_API=3 etcdctl — endpoints=[ENDPOINT] — cacert=[CA CERT] — cert=[ETCD SERVER CERT] — key=[ETCD SERVER KEY] snapshot save [BACKUP FILE NAME]
+kubectl describe pod etcd-master -n kube-system
 ```
-	
+
+-    Core Concepts 19%
+
+**config maps**
+```bash	
+kubectl create configmap app-config --from-literal=key123=value123
+```
+
+```yaml
+  containers:
+  - image: nginx
+    name: nginx
+    env:
+      - name: SPECIAL_APP_KEY
+        valueFrom:
+          configMapKeyRef:
+            name: app-config
+            key: key123
+```
+
+-    Networking 11%
+
+
+**network policies**
+
+- https://kubernetes.io/docs/concepts/services-networking/network-policies/
+
+**port forwarding**
+
+- https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/
+
+```bash
+kubectl create deployment nginx --image=nginx
+kubectl get pods -l app=nginx
+
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-554b9c67f9-vt5rn   1/1     Running   0          10s
+
+kubectl port-forward $POD_NAME 8080:80
+
+Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
+
+curl --head http://127.0.0.1:8080
+
+kubectl logs $POD_NAME
+
+```
+
+**create service and ingress**
+
+```bash
+kubectl run kubeserve2 --image=chadmcrowell/kubeserve2
+kubectl expose deployment kubeserve2 --port 80 --target-port 8080 --type LoadBalancer
+```
+
+```yaml
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: service-ingress
+spec:
+  rules:
+  - host: kubeserve.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: kubeserve2
+          servicePort: 80
+  - host: app.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: nginx
+          servicePort: 80
+  - http:
+      paths:
+      - backend:
+          serviceName: httpd
+          servicePort: 80
+```
+
+-    Scheduling 5%
+
+**static pods**
+
+- https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/
+- https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-2-b4f5c636eb4
+		
+```bash
+ps auxfw | grep kubelet
+--config=/var/lib/kubelet/config.yaml
+staticPodPath: /etc/kubernetes/manifests
+```
+
+**daemonsets**
+
+- https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+
 **taints and tolerations**
 
 - https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
@@ -253,45 +270,8 @@ kubectl label nodes <node-name> <label-key>=<label-value>
         disktype: ssd
 ```
 
-**fieldselectors and filtering**
 
-- https://kubernetes.io/docs/reference/kubectl/cheatsheet/ 
-- https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-4-17407899ef1a
-
-```
-kubectl get nodes -o jsonpath=’{.items[*].status.addresses[?(@.type==”ExternalIP”)].address}’
-kubectl get services — sort-by=.metadata.name
-kubectl get pods <pod-name> -o custom-columns=NAME:.metadata.name,RSRC:.metadata.resourceVersion
-kubectl get pod -o jsonpath=’{.items[*].metadata.name}’
-```
-
-**kube-controll**
-
-**cheatsheet**
-#run though all of these at least 3 times
-- https://kubernetes.io/docs/reference/kubectl/cheatsheet/ 
-
-
-**labelselectors**
-
-**create pv**
-
-```yaml
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: task-pv-volume
-  labels:
-    type: local
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 10Gi
-  accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: "/mnt/data"
-```
+-    Security 12%
 
 **securityContext**
 - https://linuxacademy.com/cp/courses/lesson/course/4019/lesson/6/module/327
@@ -309,6 +289,7 @@ spec:
       runAsUser: 2000
       allowPrivilegeEscalation: false
 ```
+
 
 **secrets**
 ```bash
@@ -335,70 +316,108 @@ spec:
 ```
 
 
-**create service and ingress**
+-    Cluster Maintenance 11%
+-    Logging / Monitoring 5%
+-    Storage 7%
 
-```bash
-kubectl run kubeserve2 --image=chadmcrowell/kubeserve2
-kubectl expose deployment kubeserve2 --port 80 --target-port 8080 --type LoadBalancer
-```
+
+**create pv**
 
 ```yaml
-apiVersion: extensions/v1beta1
-kind: Ingress
+apiVersion: v1
+kind: PersistentVolume
 metadata:
-  name: service-ingress
+  name: task-pv-volume
+  labels:
+    type: local
 spec:
-  rules:
-  - host: kubeserve.example.com
-    http:
-      paths:
-      - backend:
-          serviceName: kubeserve2
-          servicePort: 80
-  - host: app.example.com
-    http:
-      paths:
-      - backend:
-          serviceName: nginx
-          servicePort: 80
-  - http:
-      paths:
-      - backend:
-          serviceName: httpd
-          servicePort: 80
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
 ```
 
-**network policies**
+-    Troubleshooting 10%
 
-- https://kubernetes.io/docs/concepts/services-networking/network-policies/
+	
 
-**port forwarding**
 
-- https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/
+**kube-controll**
 
-```bash
-kubectl create deployment nginx --image=nginx
-kubectl get pods -l app=nginx
+**cheatsheet**
+#run though all of these at least 3 times
+- https://kubernetes.io/docs/reference/kubectl/cheatsheet/ 
 
-NAME                     READY   STATUS    RESTARTS   AGE
-nginx-554b9c67f9-vt5rn   1/1     Running   0          10s
 
-kubectl port-forward $POD_NAME 8080:80
+**labelselectors**
 
-Forwarding from 127.0.0.1:8080 -> 80
-Forwarding from [::1]:8080 -> 80
 
-curl --head http://127.0.0.1:8080
 
-kubectl logs $POD_NAME
 
-```
+
+
+
 
 **to check / read **
 
 - https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 - https://kubernetes.io/docs/concepts/cluster-administration/cluster-administration-overview/#securing-a-cluster
 - https://docs.google.com/spreadsheets/d/10NltoF_6y3mBwUzQ4bcQLQfCE1BWSgUDcJXy-Qp2JEU/edit#gid=0
+
+**TMUX quickguide:** 
+- https://linuxize.com/post/getting-started-with-tmux/
+
+**openssl generate certificates for the cluster (.key, .crt, .csr, x509)**
+
+```
+openssl genrsa -out ca.key 2048
+openssl req -x509 -new -nodes -key ca.key -subj "/CN=${MASTER_IP}" -days 10000 -out ca.crt
+openssl genrsa -out server.key 2048
+
+###Create a config file for generating a Certificate Signing Request (CSR).
+[ req ]
+default_bits = 2048
+prompt = no
+default_md = sha256
+req_extensions = req_ext
+distinguished_name = dn
+
+[ dn ]
+C = <country>
+ST = <state>
+L = <city>
+O = <organization>
+OU = <organization unit>
+CN = <MASTER_IP>
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = kubernetes
+DNS.2 = kubernetes.default
+DNS.3 = kubernetes.default.svc
+DNS.4 = kubernetes.default.svc.cluster
+DNS.5 = kubernetes.default.svc.cluster.local
+IP.1 = <MASTER_IP>
+IP.2 = <MASTER_CLUSTER_IP>
+
+[ v3_ext ]
+authorityKeyIdentifier=keyid,issuer:always
+basicConstraints=CA:FALSE
+keyUsage=keyEncipherment,dataEncipherment
+extendedKeyUsage=serverAuth,clientAuth
+subjectAltName=@alt_names
+
+openssl req -new -key server.key -out server.csr -config csr.conf
+openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key \
+-CAcreateserial -out server.crt -days 10000 \
+-extensions v3_ext -extfile csr.conf
+openssl x509  -noout -text -in ./server.crt
+```
 
 **some usefull kubectl commands**
 
