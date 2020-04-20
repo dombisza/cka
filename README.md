@@ -468,7 +468,7 @@ kubectl explain
 kubectl api-resources
 kubectl get events
 ```
-**PRACTICE**
+## PRACTICE
 
 - Q: Create a yaml file called nginx-deploy.yaml for a deployment of three replicas of nginx, listening on the container's port 80. 
 They should have the labels role=webserver and app=nginx. The deployment should be named nginx-deploy.
