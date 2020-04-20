@@ -16,7 +16,7 @@ sdombi-k8s-worker2   Ready    <none>   10d   v1.15.7   192.168.1.27   <none>    
 
 -    **Application Lifecycle Management 8%**
 
-create yaml templates fast
+- create yaml templates fast
 	
 ```bash
 kubectl create deployment nginx --image=nginx --dry-run -oyaml > deploy_nginx.yaml
@@ -27,10 +27,10 @@ kubectl expose pod nginx --type=NodePort --name=nginx=service --dry-run -oyaml >
 
 ```
 
-fieldselectors and filtering
+- fieldselectors and filtering
 
-- https://kubernetes.io/docs/reference/kubectl/cheatsheet/ 
-- https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-4-17407899ef1a
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/ 
+https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-4-17407899ef1a
 
 ```
 kubectl get nodes -o jsonpath=’{.items[*].status.addresses[?(@.type==”ExternalIP”)].address}’
@@ -39,9 +39,9 @@ kubectl get pods <pod-name> -o custom-columns=NAME:.metadata.name,RSRC:.metadata
 kubectl get pod -o jsonpath=’{.items[*].metadata.name}’
 ```
 
-rolling upgrade and rollback
+- rolling upgrade and rollback
 
-- https://kubernetes.io/docs/reference/kubectl/cheatsheet/ #Updating Resources
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/ #Updating Resources
 	
 ```bash
 kubectl run nginx --image=nginx  --replicas=3
@@ -53,9 +53,9 @@ kubectl rollout status deploy/nginx
 
 -    **Installation, Configuration & Validation 12%** + **Cluster Maintenance 11%**
 
-kubeadm upgrade
+- kubeadm upgrade
 
-- https://v1-16.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+https://v1-16.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
 
 ```bash
 #Get the version of the API server:
@@ -116,9 +116,9 @@ sudo apt-mark hold kubelet
 
 ```
 
-etcd backup
+- etcd backup
 
-- https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-3-2e7b44e89a3b
+https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-3-2e7b44e89a3b
 
 ```bash
 ETCDCTL_API=3 etcdctl help
@@ -128,7 +128,7 @@ kubectl describe pod etcd-master -n kube-system
 
 -    **Core Concepts 19%**
 
-config maps
+- config maps
 
 ```bash	
 kubectl create configmap app-config --from-literal=key123=value123
@@ -149,13 +149,13 @@ kubectl create configmap app-config --from-literal=key123=value123
 -    **Networking 11%**
 
 
-network policies
+- network policies
 
-- https://kubernetes.io/docs/concepts/services-networking/network-policies/
+https://kubernetes.io/docs/concepts/services-networking/network-policies/
 
-port forwarding
+- port forwarding
 
-- https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/
+https://kubernetes.io/docs/tasks/access-application-cluster/port-forward-access-application-cluster/
 
 ```bash
 kubectl create deployment nginx --image=nginx
@@ -175,7 +175,7 @@ kubectl logs $POD_NAME
 
 ```
 
-create service and ingress
+- create service and ingress
 
 ```bash
 kubectl run kubeserve2 --image=chadmcrowell/kubeserve2
@@ -210,10 +210,10 @@ spec:
 
 -    **Scheduling 5%**
 
-static pods
+- static pods
 
-- https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/
-- https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-2-b4f5c636eb4
+https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/
+https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-2-b4f5c636eb4
 		
 ```bash
 ps auxfw | grep kubelet
@@ -221,16 +221,17 @@ ps auxfw | grep kubelet
 staticPodPath: /etc/kubernetes/manifests
 ```
 
-daemonsets
+- daemonsets
 
-- https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
 
-taints and tolerations
+- taints and tolerations
 
-- https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 
-affinity and anti-affinity
-- https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity-beta-feature
+- affinity and anti-affinity
+
+https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity-beta-feature
 
 ```bash
 kubectl label nodes sdombi-k8s-worker1 flavor=2u8g
@@ -249,7 +250,7 @@ spec:
             - 2u8g
             - 4u8g
 ```
-nodeselector
+- nodeselector
 
 ```bash
 kubectl label nodes <node-name> <label-key>=<label-value>
@@ -274,9 +275,9 @@ kubectl label nodes <node-name> <label-key>=<label-value>
 
 -    **Security 12%**
 
-SecurityContext
+- SecurityContext
 
-- https://linuxacademy.com/cp/courses/lesson/course/4019/lesson/6/module/327
+https://linuxacademy.com/cp/courses/lesson/course/4019/lesson/6/module/327
 	
 ```yaml
 apiVersion: v1
@@ -293,7 +294,7 @@ spec:
 ```
 
 
-secrets
+- secrets
 
 ```bash
 kubectl create secret generic my-secret --from-literal=foo=bar -o yaml --dry-run > my-secret.yaml
@@ -322,7 +323,7 @@ spec:
 -    **Storage 7%**
 
 
-create pv
+- create pv
 
 ```yaml
 apiVersion: v1
@@ -354,13 +355,6 @@ spec:
 
 
 **labelselectors**
-
-
-
-
-
-
-
 
 **to check / read **
 
