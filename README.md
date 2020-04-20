@@ -16,6 +16,10 @@ sdombi-k8s-worker2   Ready    <none>   10d   v1.15.7   192.168.1.27   <none>    
 
 ## Application Lifecycle Management 8%
 
+https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#scaling-your-application
+https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/
+https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
+
 - create yaml templates fast
 	
 ```bash
@@ -52,6 +56,16 @@ kubectl rollout status deploy/nginx
 ```
 
 ## Installation, Configuration & Validation 12%** + **Cluster Maintenance 11%**
+
+https://kubernetes.io/docs/concepts/cluster-administration/networking/
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/
+https://kubernetes.io/docs/tasks/tls/managing-tls-in-a-cluster/
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
+
+https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/
+https://kubernetes.io/docs/setup/
+
+
 
 - kubeadm upgrade
 
@@ -128,6 +142,11 @@ kubectl describe pod etcd-master -n kube-system
 
 ## Core Concepts 19%**
 
+https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/
+https://kubernetes.io/docs/concepts/overview/components/
+https://kubernetes.io/docs/concepts/services-networking/service/
+https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/
+
 - config maps
 
 ```bash	
@@ -148,6 +167,11 @@ kubectl create configmap app-config --from-literal=key123=value123
 
 ## Networking 11%**
 
+https://github.com/containernetworking/cni
+https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+https://kubernetes.io/docs/concepts/services-networking/ingress/
+https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/
+https://kubernetes.io/docs/concepts/cluster-administration/networking/
 
 - network policies
 
@@ -209,6 +233,10 @@ spec:
 ```
 
 ## Scheduling 5%**
+
+https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/memory-default-namespace/
+https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 
 - static pods
 
@@ -275,6 +303,13 @@ kubectl label nodes <node-name> <label-key>=<label-value>
 
 ## Security 12%**
 
+https://kubernetes.io/docs/concepts/configuration/secret/
+https://kubernetes.io/docs/tasks/tls/managing-tls-in-a-cluster/
+https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/
+https://kubernetes.io/docs/reference/access-authn-authz/rbac/
+https://kubernetes.io/docs/tasks/administer-cluster/securing-a-cluster/
+
 - SecurityContext
 
 https://linuxacademy.com/cp/courses/lesson/course/4019/lesson/6/module/327
@@ -320,7 +355,16 @@ spec:
 ```
 
 ## Logging / Monitoring 5%**
+
+https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs
+https://kubernetes.io/docs/tasks/debug-application-cluster/debug-cluster/#looking-at-logs
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods
+https://kubernetes.io/docs/tasks/debug-application-cluster/resource-usage-monitoring/
+
 ## Storage 7%**
+
+https://kubernetes.io/docs/concepts/storage/persistent-volumes/
+https://kubernetes.io/docs/tasks/configure-pod-container/configure-volume-storage/
 
 - create pv
 
@@ -343,7 +387,8 @@ spec:
 
 ## Troubleshooting 10%**
 
-	
+https://kubernetes.io/docs/tasks/debug-application-cluster/debug-cluster/
+https://kubernetes.io/docs/tasks/debug-application-cluster/determine-reason-pod-failure/
 
 
 **kube-controll**
