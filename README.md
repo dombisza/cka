@@ -310,6 +310,71 @@ https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/
 https://kubernetes.io/docs/reference/access-authn-authz/rbac/  
 https://kubernetes.io/docs/tasks/administer-cluster/securing-a-cluster/  
 
+- ServiceAccounts, Secrets and Rolebingind
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl create serviceaccount web
+serviceaccount/web created
+linux@sdombi-k8s-master:~$ kubectl get secrets web-token-6czm5
+NAME              TYPE                                  DATA   AGE
+web-token-6czm5   kubernetes.io/service-account-token   3      39s
+```
+
+```yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  creationTimestamp: "2020-04-21T13:56:07Z"
+  name: web
+  namespace: default
+  resourceVersion: "1493503"
+  selfLink: /api/v1/namespaces/default/serviceaccounts/web
+  uid: ac79939b-4602-4a94-999b-dfa99e9c3cfa
+secrets:
+- name: web-token-6czm5
+```
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: web-role-r
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["pods"]
+  verbs: ["get", "watch", "list"]
+
+```
+```bash
+linux@sdombi-k8s-master:~$ kubectl apply -f web-roles.yaml
+role.rbac.authorization.k8s.io/web-role-r created
+linux@sdombi-k8s-master:~$ kubectl create rolebinding web-read --role=web-role-r --serviceaccount=default:web
+rolebinding.rbac.authorization.k8s.io/web-read created
+
+```
+
+```yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  creationTimestamp: "2020-04-21T14:05:41Z"
+  name: web-read
+  namespace: default
+  resourceVersion: "1494315"
+  selfLink: /apis/rbac.authorization.k8s.io/v1/namespaces/default/rolebindings/web-read
+  uid: 4c76fe63-6413-4c37-aa24-c31809e67b76
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: web-role-r
+subjects:
+- kind: ServiceAccount
+  name: web
+  namespace: default
+
+```
+
 - SecurityContext
 
 https://linuxacademy.com/cp/courses/lesson/course/4019/lesson/6/module/327
