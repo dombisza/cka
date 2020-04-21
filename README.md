@@ -1,6 +1,8 @@
 # cka
 CKA exam preparation notes and practice questions.
 
+[Practice Questions and Tasks](https://github.com/dombisza/cka#practice)
+
 The cluster I used for pacticing is a 3 node kubeadm bootstrapped cluster run on OTC ECS'es.
 
 ```bash
