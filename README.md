@@ -310,7 +310,38 @@ https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/
 https://kubernetes.io/docs/reference/access-authn-authz/rbac/  
 https://kubernetes.io/docs/tasks/administer-cluster/securing-a-cluster/  
 
-- ServiceAccounts, Secrets and Rolebingind
+- NetworkPolicies
+*deny all policy*
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+```
+*allow port 9376 from app:web to app:hostnames*
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: db-netpolicy
+spec:
+  podSelector:
+    matchLabels:
+      app: hostnames
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: web
+    ports:
+    - port: 9376
+```
+
+- ServiceAccounts, Secrets and Rolebinding
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl create serviceaccount web
