@@ -504,7 +504,7 @@ https://kubernetes.io/docs/tasks/debug-application-cluster/determine-reason-pod-
 **labelselectors**
 
 **to check / read **
-
+- https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
 - https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 - https://kubernetes.io/docs/concepts/cluster-administration/cluster-administration-overview/#securing-a-cluster
 - https://docs.google.com/spreadsheets/d/10NltoF_6y3mBwUzQ4bcQLQfCE1BWSgUDcJXy-Qp2JEU/edit#gid=0
