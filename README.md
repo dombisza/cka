@@ -1,15 +1,15 @@
 # cka
 CKA exam preparation notes and practice questions.
 
-[Practice Questions and Tasks](https://github.com/dombisza/cka#practice)  
-[application lifecycle management %8](https://github.com/dombisza/cka/blob/master/README.md#application-lifecycle-management-8)  
-[installation configuration validation 12% cluster maintenance 11%](https://github.com/dombisza/cka/blob/master/README.md#installation-configuration--validation-12--cluster-maintenance-11)  
-[core concepts 19%](https://github.com/dombisza/cka/blob/master/README.md#core-concepts-19)  
-[networking 11%](https://github.com/dombisza/cka/blob/master/README.md#networking-11)  
-[scheduling 5%](https://github.com/dombisza/cka/blob/master/README.md#scheduling-5)  
-[security 12%](https://github.com/dombisza/cka/blob/master/README.md#security-12)  
-[logging monitoring 5%](https://github.com/dombisza/cka/blob/master/README.md#logging--monitoring-5)  
-[troubleshooting 10%](https://github.com/dombisza/cka/blob/master/README.md#troubleshooting-10)  
+- [Practice Questions and Tasks](https://github.com/dombisza/cka#practice)  
+- [Application lifecycle management %8](https://github.com/dombisza/cka/blob/master/README.md#application-lifecycle-management-8)  
+- [Installation configuration validation 12% cluster maintenance 11%](https://github.com/dombisza/cka/blob/master/README.md#installation-configuration--validation-12--cluster-maintenance-11)  
+- [Core concepts 19%](https://github.com/dombisza/cka/blob/master/README.md#core-concepts-19)  
+- [Networking 11%](https://github.com/dombisza/cka/blob/master/README.md#networking-11)  
+- [Scheduling 5%](https://github.com/dombisza/cka/blob/master/README.md#scheduling-5)  
+- [Security 12%](https://github.com/dombisza/cka/blob/master/README.md#security-12)  
+- [Logging monitoring 5%](https://github.com/dombisza/cka/blob/master/README.md#logging--monitoring-5)  
+- [Troubleshooting 10%](https://github.com/dombisza/cka/blob/master/README.md#troubleshooting-10)  
 
 The cluster I used for pacticing is a 3 node kubeadm bootstrapped cluster run on OTC ECS'es.
 
