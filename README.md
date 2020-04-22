@@ -79,61 +79,66 @@ https://kubernetes.io/docs/setup/
 https://v1-16.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
 
 ```bash
-#Get the version of the API server:
+##control plane
+linux@sdombi-k8s-master:~$ sudo apt-cache policy kubeadm | grep 1.16.9-00
+     1.16.9-00 500
+linux@sdombi-k8s-master:~$ sudo apt-mark unhold kubeadm kubelet
+Canceled hold on kubeadm.
+Canceled hold on kubelet.
+linux@sdombi-k8s-master:~$ sudo apt install -y kubeadm=1.16.9-00 >/dev/null
 
-kubectl version --short
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
-#View the version of kubelet:
+linux@sdombi-k8s-master:~$ sudo apt-mark hold kubeadm
+linux@sdombi-k8s-master:~$ kubeadm version
+kubeadm version: &version.Info{Major:"1", Minor:"16", GitVersion:"v1.16.9", GitCommit:"a17149e1a189050796ced469dbd78d380f2ed5ef", GitTreeState:"clean", BuildDate:"2020-04-16T11:42:30Z", GoVersion:"go1.13.9", Compiler:"gc", Platform:"linux/amd64"}
+linux@sdombi-k8s-master:~$ sudo kubeadm upgrade plan
+...
+COMPONENT   CURRENT       AVAILABLE
+Kubelet     3 x v1.15.7   v1.16.9
 
-kubectl describe nodes
+Upgrade to the latest stable version:
 
-#View the version of controller-manager pod:
+COMPONENT            CURRENT    AVAILABLE
+API Server           v1.15.11   v1.16.9
+Controller Manager   v1.15.11   v1.16.9
+Scheduler            v1.15.11   v1.16.9
+Kube Proxy           v1.15.11   v1.16.9
+CoreDNS              1.3.1      1.6.2
+Etcd                 3.3.10     3.3.15-0
 
-kubectl get po [controller_pod_name] -o yaml -n kube-system
+linux@sdombi-k8s-master:~$ sudo kubeadm upgrade apply v1.16.9
+...
+[upgrade/successful] SUCCESS! Your cluster was upgraded to "v1.16.9". Enjoy!
+linux@sdombi-k8s-master:~$ sudo apt install -y kubectl=1.16.9-00 >/dev/null
 
-#Release the hold on versions of kubeadm and kubelet:
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
-sudo apt-mark unhold kubeadm kubelet
+linux@sdombi-k8s-master:~$ sudo apt-mark hold kubectl
+kubectl set on hold.
+linux@sdombi-k8s-master:~$ sudo apt install kubelet=1.16.9-00
+linux@sdombi-k8s-master:~$ kubelet --version
+Kubernetes v1.16.9
 
-#Install version 1.16.6 of kubeadm:
+##nodes
+root@sdombi-k8s-worker1:/home/linux# apt-mark unhold kubeadm && apt install -y kubeadm=1.16.9-00 && apt-mark hold kubeadm
+linux@sdombi-k8s-master:~$ kubectl drain sdombi-k8s-worker1 --ignore-daemonsets
+linux@sdombi-k8s-worker1:~$ sudo kubeadm upgrade node
+root@sdombi-k8s-worker1:/home/linux# apt-mark unhold kubelet kubectl && apt-get update && apt-get install -y kubelet=1.16.9-00 kubectl=1.16.9-00 && apt-mark hold kubelet kubectl
+root@sdombi-k8s-worker1:/home/linux# systemctl restart kubelet
+root@sdombi-k8s-worker1:/home/linux# kubelet --version
+Kubernetes v1.16.9
+linux@sdombi-k8s-master:~$ kubectl uncordon sdombi-k8s-worker1
+node/sdombi-k8s-worker1 uncordoned
 
-sudo apt install -y kubeadm=1.16.6-00
+##do the same with node2
 
-#Hold the version of kubeadm at 1.16.6:
+linux@sdombi-k8s-master:~$ kubectl get nodes
+NAME                 STATUS   ROLES    AGE   VERSION
+sdombi-k8s-master    Ready    master   12d   v1.16.9
+sdombi-k8s-worker1   Ready    <none>   12d   v1.16.9
+sdombi-k8s-worker2   Ready    <none>   12d   v1.16.9
 
-sudo apt-mark hold kubeadm
-
-#Verify the version of kubeadm:
-
-kubeadm version
-
-#Plan the upgrade of all the controller components:
-
-sudo kubeadm upgrade plan
-
-#Upgrade the controller components:
-
-sudo kubeadm upgrade apply v1.16.6
-
-#Release the hold on the version of kubectl:
-
-sudo apt-mark unhold kubectl
-
-#Upgrade kubectl:
-
-sudo apt install -y kubectl=1.16.6-00
-
-#Hold the version of kubectl at 1.16.6:
-
-sudo apt-mark hold kubectl
-
-#Upgrade the version of kubelet:
-
-sudo apt install -y kubelet=1.16.6-00
-
-#Hold the version of kubelet at 1.16.6:
-
-sudo apt-mark hold kubelet
 
 ```
 
@@ -510,7 +515,7 @@ https://kubernetes.io/docs/tasks/debug-application-cluster/determine-reason-pod-
 - https://docs.google.com/spreadsheets/d/10NltoF_6y3mBwUzQ4bcQLQfCE1BWSgUDcJXy-Qp2JEU/edit#gid=0
 
 **TMUX quickguide:** 
-- https://linuxize.com/post/getting-started-with-tmux/
+- https://linuxize.com/post/getting-started-with-tmux/  ## 'ctrl+b open-bracket
 
 **openssl generate certificates for the cluster (.key, .crt, .csr, x509)**
 
