@@ -2,7 +2,7 @@
 CKA exam preparation notes and practice questions.
 
 - [Practice Questions and Tasks](https://github.com/dombisza/cka#practice)  
-- [Application lifecycle management %8](https://github.com/dombisza/cka/blob/master/README.md#application-lifecycle-management-8)  
+- [Application lifecycle management 8%](https://github.com/dombisza/cka/blob/master/README.md#application-lifecycle-management-8)  
 - [Installation configuration validation 12% cluster maintenance 11%](https://github.com/dombisza/cka/blob/master/README.md#installation-configuration--validation-12--cluster-maintenance-11)  
 - [Core concepts 19%](https://github.com/dombisza/cka/blob/master/README.md#core-concepts-19)  
 - [Networking 11%](https://github.com/dombisza/cka/blob/master/README.md#networking-11)  
