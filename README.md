@@ -184,7 +184,7 @@ kubectl create configmap app-config --from-literal=key123=value123
 ```
 
 ## Networking 11%**
-
+[Life of a Packet [I] - Michael Rubin, Google](https://www.youtube.com/watch?v=0Omvgd7Hg1I) #highly recommended!!!  
 https://github.com/containernetworking/cni  
 https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/  
 https://kubernetes.io/docs/concepts/services-networking/ingress/  
