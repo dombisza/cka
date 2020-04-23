@@ -40,6 +40,12 @@ kubectl expose pod nginx --type=NodePort --name=nginx=service --dry-run -oyaml >
 
 ```
 
+- run busybox for testing and remove it automaticly on exit
+
+```bash
+kubectl run -it --rm --restart=Never busybox --image=busybox sh
+```
+
 - fieldselectors and filtering
 
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/  
