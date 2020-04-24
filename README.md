@@ -363,6 +363,7 @@ https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/  
 https://kubernetes.io/docs/reference/access-authn-authz/rbac/  
 https://kubernetes.io/docs/tasks/administer-cluster/securing-a-cluster/  
+https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#registry-secret-existing-credentials  
 
 - Manage TLS certs
 
