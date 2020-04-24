@@ -29,6 +29,13 @@ https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#sc
 https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/  
 https://kubernetes.io/docs/concepts/workloads/controllers/deployment/  
 
+- bash autocompletion
+
+```bash
+source <(kubectl completion bash) # setup autocomplete in bash into the current shell, bash-completion package should be installed first.
+echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permanently to your bash shell.
+```
+
 - create yaml templates fast
 	
 ```bash
