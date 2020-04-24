@@ -9,7 +9,7 @@ CKA exam preparation notes and practice questions.
 - [Scheduling 5%](https://github.com/dombisza/cka/blob/master/README.md#scheduling-5)  
 - [Security 12%](https://github.com/dombisza/cka/blob/master/README.md#security-12)  
 - [Logging monitoring 5%](https://github.com/dombisza/cka/blob/master/README.md#logging--monitoring-5)  
-- [Storage](https://github.com/dombisza/cka/blob/master/README.md#storage-7)  
+- [Storage 7%](https://github.com/dombisza/cka/blob/master/README.md#storage-7)  
 - [Troubleshooting 10%](https://github.com/dombisza/cka/blob/master/README.md#troubleshooting-10)  
 
 The cluster I used for pacticing is a 3 node kubeadm bootstrapped cluster run on OTC ECS'es.
