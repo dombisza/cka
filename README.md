@@ -53,21 +53,6 @@ kubectl expose pod nginx --type=NodePort --name=nginx=service --dry-run -oyaml >
 kubectl run -it --rm --restart=Never busybox --image=busybox sh
 ```
 
-- fieldselectors, sorting and filtering
-
-https://kubernetes.io/docs/reference/kubectl/cheatsheet/  
-https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-4-17407899ef1a
-
-```
-kubectl get nodes -o jsonpath=’{.items[*].status.addresses[?(@.type==”ExternalIP”)].address}’
-kubectl get services — sort-by=.metadata.name
-kubectl get pods <pod-name> -o custom-columns=NAME:.metadata.name,RSRC:.metadata.resourceVersion
-kubectl get pod -o jsonpath=’{.items[*].metadata.name}’
-kubectl get pods -o=’custom-columns=PODS:.metadata.name,Images:.spec.containers[*].image’
-kubectl get pods –sort-by=’.status.containerStatuses[0].restartCount’
-kubectl get services –sort-by=.metadata.name
-```
-
 - rolling upgrade and rollback
 
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/ #Updating Resources
@@ -131,9 +116,6 @@ linux@sdombi-k8s-master:~$ sudo apt-mark unhold kubeadm kubelet
 Canceled hold on kubeadm.
 Canceled hold on kubelet.
 linux@sdombi-k8s-master:~$ sudo apt install -y kubeadm=1.16.9-00 >/dev/null
-
-WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
-
 linux@sdombi-k8s-master:~$ sudo apt-mark hold kubeadm
 linux@sdombi-k8s-master:~$ kubeadm version
 kubeadm version: &version.Info{Major:"1", Minor:"16", GitVersion:"v1.16.9", GitCommit:"a17149e1a189050796ced469dbd78d380f2ed5ef", GitTreeState:"clean", BuildDate:"2020-04-16T11:42:30Z", GoVersion:"go1.13.9", Compiler:"gc", Platform:"linux/amd64"}
@@ -156,9 +138,6 @@ linux@sdombi-k8s-master:~$ sudo kubeadm upgrade apply v1.16.9
 ...
 [upgrade/successful] SUCCESS! Your cluster was upgraded to "v1.16.9". Enjoy!
 linux@sdombi-k8s-master:~$ sudo apt install -y kubectl=1.16.9-00 >/dev/null
-
-WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
-
 linux@sdombi-k8s-master:~$ sudo apt-mark hold kubectl
 kubectl set on hold.
 linux@sdombi-k8s-master:~$ sudo apt install kubelet=1.16.9-00
@@ -193,7 +172,7 @@ https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tri
 
 ```bash
 ETCDCTL_API=3 etcdctl help
-ETCDCTL_API=3 etcdctl — endpoints=[ENDPOINT] — cacert=[CA CERT] — cert=[ETCD SERVER CERT] — key=[ETCD SERVER KEY] snapshot save [BACKUP FILE NAME]
+ETCDCTL_API=3 etcdctl --endpoints=[ENDPOINT] --cacert=[CA CERT] --cert=[ETCD SERVER CERT] --key=[ETCD SERVER KEY] snapshot save [BACKUP FILE NAME]
 kubectl describe pod etcd-master -n kube-system
 ```
 
@@ -223,6 +202,21 @@ kubectl create configmap app-config --from-literal=key123=value123
             key: key123
 ```
 
+- fieldselectors, sorting and filtering
+
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/  
+https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-4-17407899ef1a
+
+```
+kubectl get nodes -o jsonpath=’{.items[*].status.addresses[?(@.type==”ExternalIP”)].address}’
+kubectl get services — sort-by=.metadata.name
+kubectl get pods <pod-name> -o custom-columns=NAME:.metadata.name,RSRC:.metadata.resourceVersion
+kubectl get pod -o jsonpath=’{.items[*].metadata.name}’
+kubectl get pods -o=’custom-columns=PODS:.metadata.name,Images:.spec.containers[*].image’
+kubectl get pods –sort-by=’.status.containerStatuses[0].restartCount’
+kubectl get services –sort-by=.metadata.name
+```
+
 ## Networking 11%**
 [Life of a Packet [I] - Michael Rubin, Google](https://www.youtube.com/watch?v=0Omvgd7Hg1I) #highly recommended!!!  
 https://github.com/containernetworking/cni  
@@ -233,7 +227,7 @@ https://kubernetes.io/docs/concepts/cluster-administration/networking/
 
 - network policies
 
-https://kubernetes.io/docs/concepts/services-networking/network-policies/
+https://kubernetes.io/docs/concepts/services-networking/network-policies/ #example @security
 
 - port forwarding
 
@@ -261,7 +255,7 @@ kubectl logs $POD_NAME
 
 ```bash
 kubectl run kubeserve2 --image=chadmcrowell/kubeserve2
-kubectl expose deployment kubeserve2 --port 80 --target-port 8080 --type LoadBalancer
+kubectl expose deployment kubeserve2 --port 80 --target-port 8080
 ```
 
 ```yaml
@@ -302,14 +296,16 @@ https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/
 https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-2-b4f5c636eb4  
 		
 ```bash
+#check kubelet config location
 ps auxfw | grep kubelet
 --config=/var/lib/kubelet/config.yaml
+#check the path for static pods in config
 staticPodPath: /etc/kubernetes/manifests
 ```
 
 - daemonsets
 
-https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
+https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/ 
 
 - taints and tolerations
 
@@ -451,7 +447,7 @@ spec:
     - port: 9376
 ```
 
-- ServiceAccounts, Secrets and Rolebinding
+- ServiceAccounts, Secrets and Rolebinding, RBAC
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl create serviceaccount web
@@ -596,21 +592,12 @@ spec:
 https://kubernetes.io/docs/tasks/debug-application-cluster/debug-cluster/  
 https://kubernetes.io/docs/tasks/debug-application-cluster/determine-reason-pod-failure/  
 
-
-**kube-controll**
-
-**cheatsheet**
-#run though all of these at least 3 times
-- https://kubernetes.io/docs/reference/kubectl/cheatsheet/ 
-
-
-**labelselectors**
-
 **to check / read **
 - https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
 - https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 - https://kubernetes.io/docs/concepts/cluster-administration/cluster-administration-overview/#securing-a-cluster
 - https://docs.google.com/spreadsheets/d/10NltoF_6y3mBwUzQ4bcQLQfCE1BWSgUDcJXy-Qp2JEU/edit#gid=0
+- https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
 **TMUX quickguide:** 
 - https://linuxize.com/post/getting-started-with-tmux/  ## 'ctrl+b open-bracket
@@ -667,11 +654,11 @@ openssl x509  -noout -text -in ./server.crt
 **some usefull kubectl commands**
 
 ```bash
-$ kubectl cluster-info
-$ kubectl get nodes
-$ kubectl get componentstatuses
-$ kubectl get pods -o wide --show-labels --all-namespaces
-$ kubectl get svc  -o wide --show-labels --all-namespaces
+kubectl cluster-info
+kubectl get nodes
+kubectl get componentstatuses
+kubectl get pods -o wide --show-labels --all-namespaces
+kubectl get svc  -o wide --show-labels --all-namespaces
 kubectl explain
 kubectl api-resources
 kubectl get events
