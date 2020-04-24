@@ -91,6 +91,12 @@ https://kubernetes.io/docs/setup/
 
 https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-join/
 
+```bash
+linux@sdombi-k8s-master:~/temp$ kubeadm token create --print-join-command
+kubeadm join 192.168.1.96:6443 --token fdwu0k.28ad3uh5z5l4d8ra     --discovery-token-ca-cert-hash sha256:309ec7604db62ceaf1de054523cd188a46ebc1b29b4a73387235a63df29367f3
+
+```
+
 - kubeadm upgrade
 
 https://v1-16.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
