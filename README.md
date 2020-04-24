@@ -87,6 +87,25 @@ https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-ku
 https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/  
 https://kubernetes.io/docs/setup/  
 
+- Check certificate expiration
+
+```bash
+linux@sdombi-k8s-master:~/tls$ sudo kubeadm alpha certs check-expiration
+CERTIFICATE                EXPIRES                  RESIDUAL TIME   EXTERNALLY MANAGED
+admin.conf                 Apr 22, 2021 10:47 UTC   362d            no
+apiserver                  Apr 22, 2021 10:46 UTC   362d            no
+apiserver-etcd-client      Apr 22, 2021 10:46 UTC   362d            no
+apiserver-kubelet-client   Apr 22, 2021 10:46 UTC   362d            no
+controller-manager.conf    Apr 22, 2021 10:47 UTC   362d            no
+etcd-healthcheck-client    Apr 22, 2021 10:46 UTC   362d            no
+etcd-peer                  Apr 22, 2021 10:46 UTC   362d            no
+etcd-server                Apr 22, 2021 10:46 UTC   362d            no
+front-proxy-client         Apr 22, 2021 10:46 UTC   362d            no
+scheduler.conf             Apr 22, 2021 10:47 UTC   362d            no
+
+```
+https://kubernetes.io/docs/tasks/tls/certificate-rotation/  
+
 - kubeadm join
 
 https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-join/
