@@ -9,6 +9,7 @@ CKA exam preparation notes and practice questions.
 - [Scheduling 5%](https://github.com/dombisza/cka/blob/master/README.md#scheduling-5)  
 - [Security 12%](https://github.com/dombisza/cka/blob/master/README.md#security-12)  
 - [Logging monitoring 5%](https://github.com/dombisza/cka/blob/master/README.md#logging--monitoring-5)  
+- [Storage](https://github.com/dombisza/cka/blob/master/README.md#storage-7)  
 - [Troubleshooting 10%](https://github.com/dombisza/cka/blob/master/README.md#troubleshooting-10)  
 
 The cluster I used for pacticing is a 3 node kubeadm bootstrapped cluster run on OTC ECS'es.
@@ -65,7 +66,7 @@ kubectl rollout undo deploy/nginx
 kubectl rollout status deploy/nginx
 ```
 
-## Installation, Configuration & Validation 12%** + **Cluster Maintenance 11%**
+## Installation, Configuration & Validation 12% + Cluster Maintenance 11%
 
 https://kubernetes.io/docs/concepts/cluster-administration/networking/  
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/  
@@ -176,7 +177,7 @@ ETCDCTL_API=3 etcdctl --endpoints=[ENDPOINT] --cacert=[CA CERT] --cert=[ETCD SER
 kubectl describe pod etcd-master -n kube-system
 ```
 
-## Core Concepts 19%**
+## Core Concepts 19%
 
 https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/  
 https://kubernetes.io/docs/concepts/overview/components/  
@@ -217,7 +218,7 @@ kubectl get pods –sort-by=’.status.containerStatuses[0].restartCount’
 kubectl get services –sort-by=.metadata.name
 ```
 
-## Networking 11%**
+## Networking 11%
 [Life of a Packet [I] - Michael Rubin, Google](https://www.youtube.com/watch?v=0Omvgd7Hg1I) #highly recommended!!!  
 https://github.com/containernetworking/cni  
 https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/  
@@ -284,7 +285,7 @@ spec:
           servicePort: 80
 ```
 
-## Scheduling 5%**
+## Scheduling 5%
 
 https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/  
 https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/memory-default-namespace/  
@@ -355,7 +356,7 @@ kubectl label nodes <node-name> <label-key>=<label-value>
 ```
 
 
-## Security 12%**
+## Security 12%
 
 https://kubernetes.io/docs/concepts/configuration/secret/  
 https://kubernetes.io/docs/tasks/tls/managing-tls-in-a-cluster/  
@@ -378,35 +379,35 @@ linux@sdombi-k8s-master:~$ wget -q --show-progress --https-only --timestamping \
 >   https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
 linux@sdombi-k8s-master:~$ chmod +x cfssl_linux-amd64 cfssljson_linux-amd64 && sudo mv cfssl_linux-amd64 /usr/local/bin/cfssl && sudo mv cfssljson_linux-amd64 /usr/local/bin/cfssljson
 linux@sdombi-k8s-master:~$ cat <<EOF | cfssl genkey - | cfssljson -bare server
-> {
->   "hosts": [
->     "nginx.default.svc.cluster.local",
->     "nginx-7bffc778db-44rh5.default.pod.cluster.local",
->     "10.100.217.200",
->     "172.100.1.74"
->   ],
->   "CN": "nginx-7bffc778db-44rh5.default.pod.cluster.local",
->   "key": {
->     "algo": "ecdsa",
->     "size": 256
->   }
-> }
-> EOF
+ {
+   "hosts": [
+     "nginx.default.svc.cluster.local",
+     "nginx-7bffc778db-44rh5.default.pod.cluster.local",
+     "10.100.217.200",
+     "172.100.1.74"
+   ],
+   "CN": "nginx-7bffc778db-44rh5.default.pod.cluster.local",
+   "key": {
+     "algo": "ecdsa",
+     "size": 256
+   }
+ }
+ EOF
 
 linux@sdombi-k8s-master:~/tls$ cat <<EOF | kubectl create -f -
-> apiVersion: certificates.k8s.io/v1beta1
-> kind: CertificateSigningRequest
-> metadata:
->   name: pod-csr.web
-> spec:
->   groups:
->   - system:authenticated
->   request: $(cat server.csr | base64 | tr -d '\n')
->   usages:
->   - digital signature
->   - key encipherment
->   - server auth
-> EOF
+ apiVersion: certificates.k8s.io/v1beta1
+ kind: CertificateSigningRequest
+ metadata:
+   name: pod-csr.web
+ spec:
+   groups:
+   - system:authenticated
+   request: $(cat server.csr | base64 | tr -d '\n')
+   usages:
+   - digital signature
+   - key encipherment
+   - server auth
+ EOF
 linux@sdombi-k8s-master:~/tls$ kubectl get csr
 NAME          AGE   REQUESTOR          CONDITION
 pod-csr.web   4s    kubernetes-admin   Pending
@@ -556,14 +557,14 @@ spec:
       secretName: my-secret
 ```
 
-## Logging / Monitoring 5%**
+## Logging / Monitoring 5%
 
 https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs  
 https://kubernetes.io/docs/tasks/debug-application-cluster/debug-cluster/#looking-at-logs  
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods  
 https://kubernetes.io/docs/tasks/debug-application-cluster/resource-usage-monitoring/  
 
-## Storage 7%**
+## Storage 7%
 
 https://kubernetes.io/docs/concepts/storage/persistent-volumes/  
 https://kubernetes.io/docs/tasks/configure-pod-container/configure-volume-storage/  
@@ -619,7 +620,7 @@ spec:
 
 ```
 
-## Troubleshooting 10%**
+## Troubleshooting 10%
 
 https://kubernetes.io/docs/tasks/debug-application-cluster/debug-cluster/  
 https://kubernetes.io/docs/tasks/debug-application-cluster/determine-reason-pod-failure/  
