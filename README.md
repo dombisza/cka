@@ -345,6 +345,57 @@ https://kubernetes.io/docs/tasks/administer-cluster/declare-network-policy/
 https://kubernetes.io/docs/reference/access-authn-authz/rbac/  
 https://kubernetes.io/docs/tasks/administer-cluster/securing-a-cluster/  
 
+- Manage TLS certs
+
+```bash
+linux@sdombi-k8s-master:~$ kubectl exec nginx-7bffc778db-44rh5 -- ls /var/run/secrets/kubernetes.io/serviceaccount
+ca.crt
+namespace
+token
+
+linux@sdombi-k8s-master:~$ wget -q --show-progress --https-only --timestamping \
+>   https://pkg.cfssl.org/R1.2/cfssl_linux-amd64 \
+>   https://pkg.cfssl.org/R1.2/cfssljson_linux-amd64
+linux@sdombi-k8s-master:~$ chmod +x cfssl_linux-amd64 cfssljson_linux-amd64 && sudo mv cfssl_linux-amd64 /usr/local/bin/cfssl && sudo mv cfssljson_linux-amd64 /usr/local/bin/cfssljson
+linux@sdombi-k8s-master:~$ cat <<EOF | cfssl genkey - | cfssljson -bare server
+> {
+>   "hosts": [
+>     "nginx.default.svc.cluster.local",
+>     "nginx-7bffc778db-44rh5.default.pod.cluster.local",
+>     "10.100.217.200",
+>     "172.100.1.74"
+>   ],
+>   "CN": "nginx-7bffc778db-44rh5.default.pod.cluster.local",
+>   "key": {
+>     "algo": "ecdsa",
+>     "size": 256
+>   }
+> }
+> EOF
+
+linux@sdombi-k8s-master:~/tls$ cat <<EOF | kubectl create -f -
+> apiVersion: certificates.k8s.io/v1beta1
+> kind: CertificateSigningRequest
+> metadata:
+>   name: pod-csr.web
+> spec:
+>   groups:
+>   - system:authenticated
+>   request: $(cat server.csr | base64 | tr -d '\n')
+>   usages:
+>   - digital signature
+>   - key encipherment
+>   - server auth
+> EOF
+linux@sdombi-k8s-master:~/tls$ kubectl get csr
+NAME          AGE   REQUESTOR          CONDITION
+pod-csr.web   4s    kubernetes-admin   Pending
+linux@sdombi-k8s-master:~/tls$ kubectl certificate approve pod-csr.web
+certificatesigningrequest.certificates.k8s.io/pod-csr.web approved
+linux@sdombi-k8s-master:~/tls$ kubectl get csr pod-csr.web -o yaml | less
+linux@sdombi-k8s-master:~/tls$ kubectl get csr pod-csr.web -o jsonpath='{.status.certificate}' | base64 --decode > server.crt
+```
+
 - NetworkPolicies
 *deny all policy*
 ```yaml
