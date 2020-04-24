@@ -87,6 +87,10 @@ https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-ku
 https://kubernetes.io/docs/tasks/administer-cluster/configure-upgrade-etcd/  
 https://kubernetes.io/docs/setup/  
 
+- kubeadm join
+
+https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-join/
+
 - kubeadm upgrade
 
 https://v1-16.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
