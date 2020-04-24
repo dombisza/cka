@@ -53,7 +53,7 @@ kubectl expose pod nginx --type=NodePort --name=nginx=service --dry-run -oyaml >
 kubectl run -it --rm --restart=Never busybox --image=busybox sh
 ```
 
-- fieldselectors and filtering
+- fieldselectors, sorting and filtering
 
 https://kubernetes.io/docs/reference/kubectl/cheatsheet/  
 https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-4-17407899ef1a
@@ -63,6 +63,9 @@ kubectl get nodes -o jsonpath=’{.items[*].status.addresses[?(@.type==”Extern
 kubectl get services — sort-by=.metadata.name
 kubectl get pods <pod-name> -o custom-columns=NAME:.metadata.name,RSRC:.metadata.resourceVersion
 kubectl get pod -o jsonpath=’{.items[*].metadata.name}’
+kubectl get pods -o=’custom-columns=PODS:.metadata.name,Images:.spec.containers[*].image’
+kubectl get pods –sort-by=’.status.containerStatuses[0].restartCount’
+kubectl get services –sort-by=.metadata.name
 ```
 
 - rolling upgrade and rollback
@@ -200,6 +203,7 @@ https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.16/
 https://kubernetes.io/docs/concepts/overview/components/  
 https://kubernetes.io/docs/concepts/services-networking/service/  
 https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/  
+https://medium.com/faun/usage-and-understanding-of-kubernetes-labels-matchlabels-and-selectors-85e5122c8248  
 
 - config maps
 
@@ -671,6 +675,7 @@ $ kubectl get svc  -o wide --show-labels --all-namespaces
 kubectl explain
 kubectl api-resources
 kubectl get events
+kubectl -n kube-system get cm kubeadm-config -o yaml
 ```
 ## PRACTICE
 
