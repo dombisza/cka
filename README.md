@@ -42,10 +42,10 @@ sudo apt install -y docker-ce kubelet=$VERSION kubeadm=$VERSION kubectl=$VERSION
 sudo apt-mark hold docker-ce kubelet kubeadm kubectl
 echo "net.bridge.bridge-nf-call-iptables=1" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
+#run only on master
 sudo kubeadm init --pod-network-cidr=10.15.0.0/16
-mkdir -p $HOME/.kube
-sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+#optional on workers
+mkdir -p $HOME/.kube && sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config && sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ###RUN KUBEADM JOIN ON WORKERS
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 kubectl get node
