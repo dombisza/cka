@@ -96,6 +96,16 @@ kubectl rollout undo deploy/nginx
 kubectl rollout status deploy/nginx
 ```
 
+- use labels for actions
+
+```bash
+ubuntu@sdombi-controller1:~/k8s$ kubectl label deployments. nginx env=prod
+deployment.extensions/nginx labeled
+ubuntu@sdombi-controller1:~/k8s$ kubectl scale deployment -l env=prod --replicas=3
+deployment.extensions/nginx scaled
+
+```
+
 ## Installation, Configuration & Validation 12% + Cluster Maintenance 11%
 
 https://kubernetes.io/docs/concepts/cluster-administration/networking/  
