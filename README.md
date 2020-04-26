@@ -22,6 +22,7 @@ sdombi-k8s-worker1   Ready    <none>   10d   v1.15.7   192.168.1.7    <none>    
 sdombi-k8s-worker2   Ready    <none>   10d   v1.15.7   192.168.1.27   <none>        Debian GNU/Linux 10 (buster)   4.19.0-8-amd64   docker://19.3.8
 
 ```
+####Bootstrap cluster with kubeadm
 <details>
 	<summary>Show install notes</summary>
 	
