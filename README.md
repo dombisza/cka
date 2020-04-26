@@ -69,6 +69,8 @@ kubectl rollout status deploy/nginx
 ## Installation, Configuration & Validation 12% + Cluster Maintenance 11%
 
 https://kubernetes.io/docs/concepts/cluster-administration/networking/  
+https://kubernetes.io/docs/setup/best-practices/certificates/  
+https://kubernetes.io/docs/concepts/cluster-administration/certificates/#openssl  
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/high-availability/  
 https://kubernetes.io/docs/tasks/tls/managing-tls-in-a-cluster/  
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/  
