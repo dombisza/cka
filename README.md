@@ -695,7 +695,8 @@ They should have the labels role=webserver and app=nginx. The deployment should 
 Expose the deployment with a load balancer and use a curl statement on the IP address of the load balancer 
 to export the output to a file titled output.txt.
 
-- Solution:
+<details>
+	<summary>Solution:</summary>
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl create deployment nginx --image=nginx --dry-run -oyaml > nginx.yaml
@@ -746,11 +747,14 @@ nginx-service   LoadBalancer   10.105.103.48   <pending>     80:32030/TCP   55s
 
 ```
 
+</details>
+
 - Q: Create a pod called "haz-docs" with an nginx image listening on port 80. 
 Attach the pod to emptyDir storage, mounted to /tmp in the container. 
 Connect to the pod and create a file with zero bytes in the /tmp directory called my-doc.txt. 
 
-**solution**
+<details>
+	<summary>Solution:</summary>
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl run haz-docs --generator=run-pod/v1 --image=nginx --port=80 --dry-run -oyaml > haz-docs.yaml
@@ -793,16 +797,24 @@ my-doc.txt
 
 ```
 
+</details>
+
 - Q: Label the worker node of your cluster with rack=qa.
+
+<details>
+	<summary>Solution:</summary>
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl label nodes sdombi-k8s-worker1 rack=qa
 node/sdombi-k8s-worker1 labeled
 ```
 
+</details>
+
 - Q: Create a new namespace called "cloud9". Create a pod running k8s.gcr.io/liveness with a liveliness probe that uses httpGet to probe an endpoint path located at /cloud-health on port 8080.  The httpHeaders are name=Custom-Header and value=Awesome. The initial delay is 3 seconds and the period is 3.
 
-**solution**
+<details>
+	<summary>Solution:</summary>
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl create namespace cloud9
@@ -840,11 +852,12 @@ status: {}
 ```bash
 linux@sdombi-k8s-master:~$ kubectl apply -f liveness.yaml
 ```
-
+</details>
 
 - Q: Create a deployment with two replicas of nginx:1.7.9. The container listens on port 80. It should be named "web-dep" and be labeled with tier=frontend with an annotation of AppVersion=3.4. The containers must be running with the UID of 1000. Scale up the deployment to 10 replicas and perform a rolling update on it.
 
-**solution**
+<details>
+	<summary>Solution:</summary>
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl create deployment nginx --image=nginx:1.7.9 --dry-run -oyaml > nginx179.yaml
@@ -903,9 +916,12 @@ deployment "web-dep" successfully rolled out
 
 ```
 
+</details>
+
 - Q: Configure a DaemonSet to run the image k8s.gcr.io/pause:2.0 in the cluster.
 
-**solution**
+<details>
+	<summary>Solution:</summary>
 
 ```yaml
 apiVersion: apps/v1
@@ -942,6 +958,8 @@ NAME           DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTO
 pause-daemon   3         3         3       3            3           <none>          4s
 ```
 
+</details>
+
 - Q: Configure the cluster to use 8.8.8.8 and 8.8.4.4 as upstream DNS servers. https://kubernetes.io/docs/tasks/administer-cluster/dns-custom-nameservers/
 
 - Q: Figure out a way to create a pod with 3 replicas using the the nginx container that can have pods deployed 
@@ -949,15 +967,19 @@ on a worker node and the master node if needed. HINT taint
 
 - Q: Copy all Kubernetes scheduler logs into a logs directory in your home directory.
 
-**solution**
+<details>
+	<summary>Solution:</summary>
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl logs `kubectl get pods -nkube-system | grep scheduler | awk '{print $1}'` -nkube-system > ~/scheduler.log
 ```
 
+</details>
+
 - Q: Create a yaml file called db-secret.yaml for a secret called db-user-pass. The secret should have two fields: a username and password.  The username should be "superadmin" and the password should be "imamazing".
 
-**solution**
+<details>
+	<summary>Solution:</summary>
 
 ```bash
 linux@sdombi-k8s-master:~$ echo -n 'superadmin' > username.txt
@@ -975,11 +997,16 @@ metadata:
 
 ```
 
+</details>
+
 - Q: Create a ConfigMap called web-config that contains the following two entries: 'web_port' set to 'localhost:8080' 'external_url' set to 'reddit.com' Run a pod called web-config-pod running nginx, expose the configmap settings as environment variables inside the nginx container.
 
 - Q: Create a namespace called awsdb in your cluster.  Create a pod called db-deploy that has one container running mysql image, and one container running nginx:1.7.9 In the same namespace create a pod called nginx-deploy with a single container running the image nginx:1.9.1.  Export the output of kubectl get pods for the awsdb namespace into a file called "pod-list.txt"
 
 - Q: This requires having a cluster with 2 worker nodes Safely remove one node from the cluster.  Print the output of the node status into a file "worker-removed.txt". Reboot the worker node.   Print the output of node status showing worker unable to be scheduled to "rebooted-worker.txt" Now bring the node back into the cluster and schedule several nginx pods to it, print the get pods wide output showing at least  one pod is on the node you rebooted.
+
+<details>
+	<summary>Solution:</summary>
 
 ```bash
 linux@sdombi-k8s-master:~$ kubectl get pods -o custom-columns=NAME:.metadata.name,NODE:.spec.nodeName
@@ -1077,6 +1104,8 @@ pause-daemon-9sjn9              sdombi-k8s-master
 static-web-sdombi-k8s-worker1   sdombi-k8s-worker1
 
 ```
+
+</details>
 
 - Q: Create a deployment running nginx, mount a volume called "hostvolume" with a container volume mount at /tmp 
 and mounted to the host at /data.  If the directory isn't there make sure it is created in the pod spec at run time.
