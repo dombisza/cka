@@ -675,6 +675,13 @@ spec:
 https://kubernetes.io/docs/tasks/debug-application-cluster/debug-cluster/  
 https://kubernetes.io/docs/tasks/debug-application-cluster/determine-reason-pod-failure/  
 
+- create tls cert  
+https://kubernetes.io/docs/concepts/cluster-administration/certificates/  
+
+```bash
+
+```
+
 **to check / read **
 - https://matthewpalmer.net/kubernetes-app-developer/articles/kubernetes-ingress-guide-nginx-example.html
 - https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
