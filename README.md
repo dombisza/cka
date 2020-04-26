@@ -679,6 +679,63 @@ https://kubernetes.io/docs/tasks/debug-application-cluster/determine-reason-pod-
 https://kubernetes.io/docs/concepts/cluster-administration/certificates/  
 
 ```bash
+ubuntu@sdombi-controller1:~/k8s$ MASTER_IP=$(kubectl get svc kubernetes -o jsonpath='{.spec.clusterIP}')
+ubuntu@sdombi-controller1:~/k8s/cert$ openssl genrsa -out ca.key 2048
+ubuntu@sdombi-controller1:~/k8s/cert$ openssl req -x509 -new -nodes -key ca.key -subj "/CN=${MASTER_IP}" -days 10000 -out ca$
+crt
+ubuntu@sdombi-controller1:~/k8s/cert$ openssl genrsa -out server.key 2048
+ubuntu@sdombi-controller1:~/k8s/cert$ vim csr-req.conf
+ubuntu@sdombi-controller1:~/k8s/cert$ openssl req -new -key server.key -out server.csr -config csr-req.conf
+ubuntu@sdombi-controller1:~/k8s/cert$ openssl x509 -req -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out server.c
+rt -days 10000 -extensions v3_ext -extfile csr-req.conf
+ubuntu@sdombi-controller1:~/k8s/cert$ openssl x509  -noout -text -in ./server.crt
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            0f:a2:30:91:a5:d1:a6:1c:bf:cb:a1:70:b7:e8:0d:26:b7:87:96:8d
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN = 10.96.0.1
+        Validity
+            Not Before: Apr 26 18:42:53 2020 GMT
+            Not After : Sep 12 18:42:53 2047 GMT
+        Subject: C = HU, ST = Csongrad, L = Szeged, O = Kubernetes, OU = Cloud, CN = 172.16.0.141
+        Subject Public Key Info:
+
+ubuntu@sdombi-controller1:~/k8s/cert$ cat csr-req.conf
+[ req ]
+default_bits = 2048
+prompt = no
+default_md = sha256
+req_extensions = req_ext
+distinguished_name = dn
+
+[ dn ]
+C = HU
+ST = Csongrad
+L = Szeged
+O = Kubernetes
+OU = Cloud
+CN = 172.16.0.141
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = kubernetes
+DNS.2 = kubernetes.default
+DNS.3 = kubernetes.default.svc
+DNS.4 = kubernetes.default.svc.cluster
+DNS.5 = kubernetes.default.svc.cluster.local
+IP.1 = 172.16.0.141
+IP.2 = 10.96.0.1
+
+[ v3_ext ]
+authorityKeyIdentifier=keyid,issuer:always
+basicConstraints=CA:FALSE
+keyUsage=keyEncipherment,dataEncipherment
+extendedKeyUsage=serverAuth,clientAuth
+subjectAltName=@alt_names
 
 ```
 
