@@ -22,7 +22,33 @@ sdombi-k8s-worker1   Ready    <none>   10d   v1.15.7   192.168.1.7    <none>    
 sdombi-k8s-worker2   Ready    <none>   10d   v1.15.7   192.168.1.27   <none>        Debian GNU/Linux 10 (buster)   4.19.0-8-amd64   docker://19.3.8
 
 ```
-*add kubeadm cluster install notes here*
+
+```bash
+#VERSION=desired k8s version
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+cat << EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
+deb https://apt.kubernetes.io/ kubernetes-xenial main
+EOF
+
+sudo apt update
+sudo apt install -y docker-ce kubelet=$VERSION kubeadm=$VERSION kubectl=$VERSION
+sudo apt-mark hold docker-ce kubelet kubeadm kubectl
+echo "net.bridge.bridge-nf-call-iptables=1" | sudo tee -a /etc/sysctl.conf
+sudo sysctl -p
+sudo kubeadm init --pod-network-cidr=10.15.0.0/16
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+###RUN KUBEADM JOIN ON WORKERS
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+kubectl get node
+source <(kubectl completion bash)
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+```
 
 ## Application Lifecycle Management 8%
 
