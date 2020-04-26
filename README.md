@@ -22,7 +22,8 @@ sdombi-k8s-worker1   Ready    <none>   10d   v1.15.7   192.168.1.7    <none>    
 sdombi-k8s-worker2   Ready    <none>   10d   v1.15.7   192.168.1.27   <none>        Debian GNU/Linux 10 (buster)   4.19.0-8-amd64   docker://19.3.8
 
 ```
-
+<details>
+	<summary>Show install notes</summary>
 ```bash
 #VERSION=desired k8s version
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -49,7 +50,7 @@ kubectl get node
 source <(kubectl completion bash)
 echo "source <(kubectl completion bash)" >> ~/.bashrc
 ```
-
+</details>
 ## Application Lifecycle Management 8%
 
 https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/#scaling-your-application  
