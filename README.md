@@ -231,6 +231,45 @@ https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-obj
 https://medium.com/faun/usage-and-understanding-of-kubernetes-labels-matchlabels-and-selectors-85e5122c8248  
 https://www.mirantis.com/blog/multi-container-pods-and-container-communication-in-kubernetes/  
 
+- multi-container pods
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mc1
+spec:
+  volumes:
+  - name: html
+    emptyDir: {}
+  containers:
+  - name: 1st
+    image: nginx
+    volumeMounts:
+    - name: html
+      mountPath: /usr/share/nginx/html
+  - name: 2nd
+    image: debian
+    volumeMounts:
+    - name: html
+      mountPath: /html
+    command: ["/bin/sh", "-c"]
+    args:
+      - while true; do
+          date >> /html/index.html;
+          sleep 1;
+        done
+
+```
+
+```bash
+ubuntu@sdombi-controller1:~/k8s$ kubectl exec -it mc1 -c 2nd ls /html
+index.html
+ubuntu@sdombi-controller1:~/k8s$ kubectl exec -it mc1 -c 1st ls /usr/share/nginx/html
+index.html
+
+```
+
 - config maps
 
 ```bash	
