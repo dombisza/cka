@@ -1115,6 +1115,59 @@ metadata:
 
 - Q: Create a ConfigMap called web-config that contains the following two entries: 'web_port' set to 'localhost:8080' 'external_url' set to 'reddit.com' Run a pod called web-config-pod running nginx, expose the configmap settings as environment variables inside the nginx container.
 
+<details>
+	<summary>Solution:</summary>  
+
+```bash
+ubuntu@sdombi-controller1:~/k8s$ cat map
+webport=loclahost:8080
+external_url=reddit.com
+ubuntu@sdombi-controller1:~/k8s$ kubectl create configmap web-config --from-env-file=map
+```
+
+```yaml
+ubuntu@sdombi-controller1:~/k8s$ cat pod_cm.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: web-config-pod
+  name: web-config-pod
+spec:
+  containers:
+  - image: nginx
+    name: web-config-pod
+    ports:
+    - containerPort: 80
+    env:
+    - name: EXTERNAL_URL
+      valueFrom:
+        configMapKeyRef:
+          name: web-config
+          key: external_url
+    - name: WEBPORT
+      valueFrom:
+        configMapKeyRef:
+          name: web-config
+          key: webport
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+```
+
+```bash
+ubuntu@sdombi-controller1:~/k8s$ kubectl apply -f pod_cm.yaml
+ubuntu@sdombi-controller1:~/k8s$ kubectl exec -it web-config-pod env | grep EXTERNAL
+EXTERNAL_URL=reddit.com
+ubuntu@sdombi-controller1:~/k8s$ kubectl exec -it web-config-pod env | grep WEBPORT
+WEBPORT=loclahost:8080
+```
+
+</details>
+
 - Q: Create a namespace called awsdb in your cluster.  Create a pod called db-deploy that has one container running mysql image, and one container running nginx:1.7.9 In the same namespace create a pod called nginx-deploy with a single container running the image nginx:1.9.1.  Export the output of kubectl get pods for the awsdb namespace into a file called "pod-list.txt"
 
 - Q: This requires having a cluster with 2 worker nodes Safely remove one node from the cluster.  Print the output of the node status into a file "worker-removed.txt". Reboot the worker node.   Print the output of node status showing worker unable to be scheduled to "rebooted-worker.txt" Now bring the node back into the cluster and schedule several nginx pods to it, print the get pods wide output showing at least  one pod is on the node you rebooted.
