@@ -1126,6 +1126,8 @@ ubuntu@sdombi-controller1:~/k8s$ kubectl create configmap web-config --from-env-
 ```
 
 ```yaml
+ubuntu@sdombi-controller1:~/k8s$ kubectl run --generator=run-pod/v1 web-config-pod --image=nginx --port=80 -oyaml --dry-run > pod_cm.yaml
+###add env config to pod.yaml
 ubuntu@sdombi-controller1:~/k8s$ cat pod_cm.yaml
 apiVersion: v1
 kind: Pod
