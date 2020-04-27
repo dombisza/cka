@@ -421,7 +421,7 @@ spec:
 - nodeselector
 
 ```bash
-kubectl label nodes <node-name> <label-key>=<label-value>
+kubectl label nodes sdombi-worker-0001 disktype=ssd
 ```
 
 ```yaml
