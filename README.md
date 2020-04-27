@@ -1170,7 +1170,50 @@ WEBPORT=loclahost:8080
 
 </details>
 
-- Q: Create a namespace called awsdb in your cluster.  Create a pod called db-deploy that has one container running mysql image, and one container running nginx:1.7.9 In the same namespace create a pod called nginx-deploy with a single container running the image nginx:1.9.1.  Export the output of kubectl get pods for the awsdb namespace into a file called "pod-list.txt"
+- Q: Create a namespace called awsdb in your cluster.  Create a pod called db-deploy that has one container running mysql image, and one container running nginx:1.17 In the same namespace create a pod called nginx-deploy with a single container running the image nginx:1.15.  Export the output of kubectl get pods for the awsdb namespace into a file called "pod-list.txt"
+
+<details>
+	<summary>Solution:</summary>  
+
+```bash
+ubuntu@sdombi-controller1:~/k8s$ kubectl run --generator=run-pod/v1 db-deploy --image=nginx:1.17 --namespace=awsdb -oyaml --dry-run > db-deploy.yaml
+```	
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: db-deploy
+  name: db-deploy
+spec:
+  containers:
+  - image: nginx:1.17
+    name: nginx
+  - image: mysql
+    name: mysql
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: password
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+
+```
+
+```bash
+ubuntu@sdombi-controller1:~/k8s$ kubectl run nginx --image=nginx:1.15 --generator=run-pod/v1 -nawsdb
+ubuntu@sdombi-controller1:~/k8s$ kubectl get pods -owide -nawsdb > pod-list.txt
+ubuntu@sdombi-controller1:~/k8s$ cat pod-list.txt
+NAME        READY   STATUS    RESTARTS   AGE    IP           NODE                 NOMINATED NODE   READINESS GATES
+db-deploy   2/2     Running   0          108s   10.244.3.9   sdombi-worker-0003   <none>           <none>
+nginx       1/1     Running   0          18s    10.244.2.8   sdombi-worker-0002   <none>           <none>
+
+```
+
+</details>
 
 - Q: This requires having a cluster with 2 worker nodes Safely remove one node from the cluster.  Print the output of the node status into a file "worker-removed.txt". Reboot the worker node.   Print the output of node status showing worker unable to be scheduled to "rebooted-worker.txt" Now bring the node back into the cluster and schedule several nginx pods to it, print the get pods wide output showing at least  one pod is on the node you rebooted.
 
