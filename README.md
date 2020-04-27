@@ -229,6 +229,7 @@ https://kubernetes.io/docs/concepts/overview/components/
 https://kubernetes.io/docs/concepts/services-networking/service/  
 https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/  
 https://medium.com/faun/usage-and-understanding-of-kubernetes-labels-matchlabels-and-selectors-85e5122c8248  
+https://www.mirantis.com/blog/multi-container-pods-and-container-communication-in-kubernetes/  
 
 - config maps
 
