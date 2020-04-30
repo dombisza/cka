@@ -846,6 +846,7 @@ spec:
       creationTimestamp: null
       labels:
         app: nginx
+	role: webserver
     spec:
       containers:
       - image: nginx
