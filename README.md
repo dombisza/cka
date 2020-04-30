@@ -151,9 +151,6 @@ kubeadm join 192.168.1.96:6443 --token fdwu0k.28ad3uh5z5l4d8ra     --discovery-t
 
 https://v1-16.docs.kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
 
-<details>
-	<summary>Show upgrade notes</summary>
-
 ```bash
 ##control plane
 linux@sdombi-k8s-master:~$ sudo apt-cache policy kubeadm | grep 1.16.9-00
@@ -210,8 +207,6 @@ sdombi-k8s-worker1   Ready    <none>   12d   v1.16.9
 sdombi-k8s-worker2   Ready    <none>   12d   v1.16.9
 ```
 
-</details>
-
 - etcd backup
 
 https://medium.com/@imarunrk/certified-kubernetes-administrator-cka-tips-and-tricks-part-3-2e7b44e89a3b
@@ -230,6 +225,24 @@ https://kubernetes.io/docs/concepts/services-networking/service/
 https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/  
 https://medium.com/faun/usage-and-understanding-of-kubernetes-labels-matchlabels-and-selectors-85e5122c8248  
 https://www.mirantis.com/blog/multi-container-pods-and-container-communication-in-kubernetes/  
+
+- resource requests and limits
+
+```yaml
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: demo
+    image: polinux/stress
+    resources:
+      limits:
+        memory: 200Mi
+        cpu: 200m
+      requests:
+        memory: 100Mi
+        cpu: 100m
+```
 
 - multi-container pods
 
@@ -453,8 +466,6 @@ https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-regi
 
 - Manage TLS certs
 
-<details>
-	<summary>Show notes.</summary>
 	
 ```bash
 linux@sdombi-k8s-master:~$ kubectl exec nginx-7bffc778db-44rh5 -- ls /var/run/secrets/kubernetes.io/serviceaccount
@@ -504,8 +515,6 @@ certificatesigningrequest.certificates.k8s.io/pod-csr.web approved
 linux@sdombi-k8s-master:~/tls$ kubectl get csr pod-csr.web -o yaml | less
 linux@sdombi-k8s-master:~/tls$ kubectl get csr pod-csr.web -o jsonpath='{.status.certificate}' | base64 --decode > server.crt
 ```
-
-</details>
 
 - NetworkPolicies
 *deny all policy*
@@ -605,7 +614,6 @@ subjects:
 
 - SecurityContext
 
-https://linuxacademy.com/cp/courses/lesson/course/4019/lesson/6/module/327
 	
 ```yaml
 apiVersion: v1
@@ -784,7 +792,9 @@ subjectAltName=@alt_names
 - https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 - https://kubernetes.io/docs/concepts/cluster-administration/cluster-administration-overview/#securing-a-cluster
 - https://docs.google.com/spreadsheets/d/10NltoF_6y3mBwUzQ4bcQLQfCE1BWSgUDcJXy-Qp2JEU/edit#gid=0
-- https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+- https://kubernetes.io/docs/reference/kubectl/cheatsheet/  
+- https://github.com/kelseyhightower/kubernetes-the-hard-way  
+- https://kubernetesbyexample.com/  
 
 **TMUX quickguide:** 
 - https://linuxize.com/post/getting-started-with-tmux/  ## 'ctrl+b open-bracket
