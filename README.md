@@ -23,8 +23,10 @@ sdombi-k8s-worker2   Ready    <none>   10d   v1.15.7   192.168.1.27   <none>    
 
 ```
 #### Bootstrap cluster with kubeadm  
+terraform + salt kubeadm cluster bootstrap: https://github.com/dombisza/k8s-devops  
+
 <details>
-	<summary>Show install notes</summary>
+	<summary>[OLD]Show install notes</summary>
 	
 ```bash
 #VERSION=desired k8s version
