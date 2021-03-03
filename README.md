@@ -72,11 +72,11 @@ echo "source <(kubectl completion bash)" >> ~/.bashrc # add autocomplete permane
 - create yaml templates fast
 	
 ```bash
-kubectl create deployment nginx --image=nginx --dry-run -oyaml > deploy_nginx.yaml
-kubectl expose deployment nginx --type=NodePort --name=nginx-service --dry-run -oyaml > nginx_service_for_deploy.yaml
+kubectl create deployment nginx --image=nginx --dry-run=client -oyaml > deploy_nginx.yaml
+kubectl expose deployment nginx --type=NodePort --name=nginx-service --dry-run=client -oyaml > nginx_service_for_deploy.yaml
 
 kubectl run --generator=run-pod/v1 nginx --image=nginx -oyaml > pod_nginx.yaml
-kubectl expose pod nginx --type=NodePort --name=nginx=service --dry-run -oyaml > nginx_service_for_pod.yaml
+kubectl expose pod nginx --type=NodePort --name=nginx=service --dry-run=client -oyaml > nginx_service_for_pod.yaml
 
 ```
 
