@@ -1,5 +1,5 @@
 # CKA preparation notes
-
+fyi: these notes are mostly for cka exam before the 2020 exam updates. I will update some parts for the new exam format and for k8s 1.19 version, but i am not going to remove the parts which are not in the exam anymore.
 
 - [Practice Questions and Tasks](https://github.com/dombisza/cka#practice)  
 - [Application lifecycle management 8%](https://github.com/dombisza/cka/blob/master/README.md#application-lifecycle-management-8)  
