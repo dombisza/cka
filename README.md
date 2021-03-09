@@ -417,21 +417,42 @@ https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#node-affinity-beta-feature
 
 ```bash
-kubectl label nodes sdombi-k8s-worker1 flavor=2u8g
+controlplane $ kubectl label node node01 color=blue
 ```
 
 ```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: blue
+  name: blue
 spec:
-  affinity:
-    nodeAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-        nodeSelectorTerms:
-        - matchExpressions:
-          - key: flavor
-            operator: In
-            values:
-            - 2u8g
-            - 4u8g
+  replicas: 6
+  selector:
+    matchLabels:
+      app: blue
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: blue
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: color
+                operator: In
+                values:
+                - blue
+      containers:
+      - image: nginx
+        name: nginx
+        resources: {}
 ```
 - nodeselector
 
